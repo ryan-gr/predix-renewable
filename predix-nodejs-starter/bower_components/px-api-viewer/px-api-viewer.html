@@ -1,0 +1,355 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-location/iron-location.html" />
+<link rel="import" href="../iron-doc-viewer/iron-doc-element.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html" />
+<link rel="import" href="css/px-api-viewer-styles.html" />
+<link rel="import" href="find-polyfill.html" />
+
+<!--
+Element providing API documentation for a requested Polymer component
+
+##### Usage
+
+    <px-api-viewer source="demo_component"></px-api-viewer>
+
+### Styling
+The following custom properties are available for styling. Use them with the default tooltip-style property (omit it, or use value "dark").
+
+Custom property | Description
+----------------|-------------
+`--px-tooltip-text-color` | Text color for the tooltip
+`--px-tooltip-background-color` | Background color for the tooltip
+
+@element px-api-viewer
+@blurb Element providing API documentation for a requested Polymer component
+@homepage index.html
+@demo demo.html
+-->
+<dom-module id="px-api-viewer">
+  <template>
+    <iron-ajax
+        auto
+        url="[[_getAPIUrl(source, apiSourceFilePath)]]"
+        handle-as="json"
+        on-response="_handleResponse">
+    </iron-ajax>
+    <style include="iron-doc-default-theme"></style>
+    <style include="px-api-viewer-styles"></style>
+    <iron-location hash="{{_hash}}"></iron-location>
+    <iron-doc-element
+        id="doc"
+        descriptor="[[_targetElementDescriptor]]"
+        base-href="[[_getBaseHref(disableHashPrefix)]]"
+        fragment-prefix="[[_getFragmentPrefix(source, pagePath)]]">
+    </iron-doc-element>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'px-api-viewer',
+
+    /**
+     * Properties block, expose attribute values to the DOM via 'notify'
+     *
+     * @property properties
+     * @type Object
+     */
+    properties: {
+      /*
+      * A json object, created by hydrolysis, which contains the actual
+      * documentation for the component
+      *
+      * @property _elementDescriptor
+      * @type Object
+      */
+      _elementDescriptor: {
+        type: Object,
+        notify: true
+      },
+      /*
+      * A string holding the name of the component.
+      * do not add `.html` to this attribute.
+      *
+      * @property source
+      * @type String
+      */
+      source: {
+        type: String,
+        value: '',
+        notify: true
+      },
+      /*
+      * A string holding the path to the api source file e.g. px-tabs/px-tabs-api.json
+      *
+      * @property apiSourceFilePath
+      * @type String
+      */
+      apiSourceFilePath: {
+        type: String,
+        value: ''
+      },
+      /**
+       * An array which contains the names of properties/methods/events which will be removed
+       * from the hydrolysis object
+       * @type {Array}
+       */
+      hide: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+      /**
+       * An array which contains the names of properties which will be marked
+       * as private
+       * @type {Array}
+       */
+      markPrivate: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+      /**
+       * An array which contains the names of properties which will be marked
+       * as readonly
+       * @type {Array}
+       */
+      markReadOnly: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+      /**
+       * an array which contains the names and new descriptions of
+       * properties we want to change the deccription of.
+       * @type {Array}
+       */
+      changeDescription: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+      /**
+       * By default it is assumed all page paths are done with a hash symbol
+       * for client-side routing. If your server is equipped to handle real
+       * paths for single page app routing, disable this. See `pagePath`
+       * for more details.
+       * @type {Boolean}
+       */
+      disableHashPrefix: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * The path to the page that this demo is hosted on from the root.
+       * This path is used to create the anchor links for the API viewer.
+       * Should begin with a '/' slash. By default it is assumed this will
+       * be preceded by a hash for client-side routing. See `disableHashPrefix`
+       * to disable this behavior.
+       *
+       * Example: For a component with a demo/API page hosted at
+       * 'https://www.predix-ui.com/#/elements/px-alert-message', the page
+       * path should be '/elements/px-alert-message'.
+       * @type {String}
+       */
+      pagePath: {
+        type: String,
+        value: ''
+      },
+      /**
+       * The filtered element descriptor pared down to only include the element
+       * that is demo'ed. Uses the element name from the `source` property.
+       * @type {Object}
+       */
+      _targetElementDescriptor: {
+        type: Object
+      },
+      /**
+       * The active anchor (the portion of the URL after the ':' symbol), used
+       * to scroll the page to a specific spot on load.
+       * @type {String}
+       */
+      _anchor: {
+        type: String,
+        value: '',
+        computed: '_getAnchorFromHash(_hash)',
+        observer: '_tryScrollToAnchor'
+      },
+      _baseHref: {
+        type: String,
+      },
+
+      _elementDescriptorTrigger: {
+        type: Number,
+        value: 0
+      }
+    },
+
+    observers:[
+      '_getTargetElementDesc(source, _elementDescriptor, _elementDescriptorTrigger)'
+    ],
+
+    attached: function() {
+      this._handlePageLoaded = this._handlePageLoaded || this._handlePageLoaded.bind(this);
+      window.addEventListener('page-loaded', this._handlePageLoaded, false);
+    },
+    detached: function() {
+      window.removeEventListener('page-loaded', this._handlePageLoaded, false);
+    },
+    /**
+     * find the passed item in either the elements or behaviors arrays in the analyzer obj
+     */
+    _cleanAPIDocs: function() {
+      var categories = ['methods', 'properties'],
+          thisElement = this._elementDescriptor['elements'].find(function(eleAPI){
+            return (eleAPI.tagname === this.source);
+          }, this);
+
+      categories.forEach(function(apiClass){
+        var elementAPICollection = thisElement[apiClass];
+        elementAPICollection = this._hideAPI(elementAPICollection);
+        elementAPICollection = this._changeDescription(elementAPICollection);
+        elementAPICollection.forEach(function(apiItem){
+          this._markReadOnly(apiItem);
+          this._markPrivate(apiItem);
+        }, this);
+
+      thisElement[apiClass] = elementAPICollection;
+      }, this);
+
+      return thisElement;
+    },
+    /**
+    *
+    * This method filters/removes any properties passed into using the hide attribute, by filtering out
+    * any matches between the
+    * @method _hideAPI
+    */
+    _hideAPI: function(inputSetToFilter) {
+      var propertiesToMutate = [];
+      //hide is a special case, since it involves removal of the item,
+      //which messes up indexes. so, instead, we filter anything that needs hiding - effectively
+      //removing the items this way.
+      propertiesToMutate = inputSetToFilter.filter(function(currentProperty) {
+        return this.hide.indexOf(currentProperty.name) === -1;
+      }.bind(this));
+
+      return propertiesToMutate;
+    },
+    _markPrivate: function(property) {
+      if (this.markPrivate.indexOf(property.name) !== -1){
+        property.privacy = 'protected';
+      }
+
+    },
+    _markReadOnly: function(property) {
+      if (this.markReadOnly.indexOf(property.name) !== -1){
+        property.metadata.polymer.readOnly = true;
+      }
+    },
+    _changeDescription: function(inputSetToChange) {
+      this.changeDescription.forEach(function(propertyToChange){
+        var itemToUpdate = inputSetToChange.find(function(property){
+          return propertyToChange.name === property.name;
+        });
+        if (itemToUpdate) {
+          itemToUpdate.description = propertyToChange.desc;
+        }
+      });
+      return inputSetToChange;
+    },
+    _handleResponse: function(val){
+      var eleDescriptor = val.target.lastResponse;
+      this._elementDescriptor = eleDescriptor;
+      this._cleanAPIDocs();
+      this.set('_elementDescriptor', eleDescriptor );
+      this.set('_elementDescriptorTrigger', this._elementDescriptorTrigger++ );
+      this.fire('pxElementAPIReceived', eleDescriptor[15]);
+    },
+    _getAPIUrl: function(){
+      var parentFolder = this.importPath.substr(0, this.importPath.indexOf(this.tagName.toLowerCase()))
+      if(this.apiSourceFilePath){
+        return parentFolder + this.apiSourceFilePath;
+      }else {
+        return parentFolder + this.source + '/' + this.source + '-api.json';;
+      }
+    },
+    // @NOTE: The scrolling is causing a weird error where some of the page
+    // is no longer fit into the visible region of the app shell. Need to fix
+    // before re-introducing the scrollTo handlers below. Otherwise,
+    // they do their job.
+    // Relevant methods: _handlePageLoaded and _tryScrollToAnchor
+    _handlePageLoaded: function(){
+      // if (this.isAttached && this._anchor !== '') {
+      //   var scrollTo = this._tryScrollToAnchor.bind(this, this._anchor);
+      //   Polymer.RenderStatus.afterNextRender(this, scrollTo);
+      // }
+    },
+    _tryScrollToAnchor: function(anchor){
+      // if (anchor !== '') {
+      //   this.$.doc.scrollToAnchor(anchor);
+      // }
+    },
+    _getAnchorFromHash: function(hash){
+      if (!hash || hash === '' || hash.indexOf(':') === -1) {
+        return '';
+      }
+      return hash.split(':')[1];
+    },
+    _getTargetElementDesc: function(name, descriptor) {
+      // descriptor is a deep nested object
+      // iron doc shite doesnt watch for deep changes
+      // so force it to rerun and pick up our updates
+      if(typeof this._targetElementDescriptor === 'object') {
+        this._targetElementDescriptor = {};
+      }
+
+      var d;
+      if (! (name === undefined || descriptor === undefined)) {
+        d = descriptor.elements.filter(function(el) {
+          return el.name === name || el.tagname === name;
+        })[0];
+      }
+
+      this.set('_targetElementDescriptor', d);
+    },
+    _getFragmentPrefix: function(name, pagePath) {
+      if (pagePath === '') {
+        if (window.location.hash !== '') {
+          // Make sure we don't build compound ':' paths, like
+          // '/elements/px-foo:property-one:description'
+          return window.location.hash.indexOf(':') > -1 ?  window.location.hash.slice(1).split(':')[0] + ':' : window.location.hash.slice(1) + ':';
+        }
+        return '';
+      }
+      return pagePath;
+    },
+    _getBaseHref: function(disableHashPrefix) {
+      if (disableHashPrefix) {
+        return '';
+      }
+      return '#';
+    }
+  });
+</script>

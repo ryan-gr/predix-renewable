@@ -1,0 +1,14 @@
+{
+  "name": "codemirror",
+  "homepage": "https://github.com/codemirror/codemirror",
+  "version": "5.40.0",
+  "_release": "5.40.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "5.40.0",
+    "commit": "dca80d221eb070900b0a0a0fac5b4eec8d0c295b"
+  },
+  "_source": "https://github.com/codemirror/codemirror.git",
+  "_target": "^5.32.0",
+  "_originalSource": "codemirror/codemirror"
+}

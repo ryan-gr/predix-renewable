@@ -1,0 +1,167 @@
+////
+/// PX-ACTIONABLE-DESIGN
+/// Defines simple actionable text and icons classes
+/// @group px-actionable-design
+////
+
+@import "px-defaults-design/_settings.defaults.scss";
+@import "px-colors-design/_settings.colors.scss";
+
+/// Text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-actionable-text-color
+$inuit-actionable-text-color    : var(--px-actionable-text-color, $primary-default);
+
+/// Hover text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-actionable-text-color--hover
+$inuit-actionable-text-color--hover   : var(--px-actionable-text-color--hover, $primary-hover);
+
+/// Pressed text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-actionable-text-color--active
+$inuit-actionable-text-color--active   : var(--px-actionable-text-color--active, $primary-pressed);
+
+/// Select text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-selectable-text-color
+$inuit-selectable-text-color   : var(--px-selectable-text-color, $select-default);
+
+/// Select hover text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-selectable-text-color--hover
+$inuit-selectable-text-color--hover   : var(--px-selectable-text-color--hover, $select-hover);
+
+/// Select pressed text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-selectable-text-color--active
+$inuit-selectable-text-color--active   : var(--px-selectable-text-color--active, $select-pressed);
+
+/// Secondary text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-actionable-alt-text-color
+$inuit-actionable-alt-text-color   : var(--px-actionable-alt-text-color, $gray15);
+
+/// Secondary hover text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-actionable-alt-text-color--hover
+$inuit-actionable-alt-text-color--hover   : var(--px-actionable-alt-text-color--hover, $primary-default);
+
+/// Secondary pressed text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-actionable-alt-text-color--active
+$inuit-actionable-alt-text-color--active   : var(--px-actionable-alt-text-color--active, $primary-pressed);
+
+/// Disabled text color
+///
+/// @group px-actionable-design:variables:style
+/// @type Color [default]
+/// @todo --px-actionable-disabled-text-color
+$inuit-actionable-disabled-text-color   : var(--px-actionable-disabled-text-color, rgba($black, 0.3));
+
+
+.actionable{
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  background: none;
+  white-space: nowrap;
+  line-height: inherit;
+  text-decoration: none;
+  font: inherit;
+  -webkit-font-smoothing: antitodoed;
+  cursor: pointer;
+  outline: none;
+  transition: color .4s;
+  &,
+  &:link,
+  &:visited,
+  &:active,
+  &:focus {
+    color: $inuit-actionable-text-color;
+    outline: inherit;
+  }
+  &:hover{
+    color: $inuit-actionable-text-color--hover;
+  }
+  &:active {
+    color: $inuit-actionable-text-color--active;
+  }
+}
+
+.actionable--select{
+  &,
+  &:link,
+  &:visited,
+  &:active,
+  &:focus {
+    color: $inuit-selectable-text-color;
+  }
+  &:hover{
+    color: $inuit-selectable-text-color--hover;
+  }
+  &:active {
+      color: $inuit-selectable-text-color--active;
+    }
+  }
+
+.actionable--action,
+.actionable--secondary{
+  &,
+  &:link,
+  &:visited,
+  &:active,
+  &:focus {
+    color: $inuit-actionable-alt-text-color;
+  }
+  &:hover{
+    color: $inuit-actionable-alt-text-color--hover;
+  }
+  &:active {
+      color: $inuit-actionable-alt-text-color--active;
+    }
+  }
+
+.actionable--disabled,
+.actionable[disabled] {
+    &,
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      cursor: not-allowed;
+      color: $inuit-actionable-disabled-text-color;
+    }
+  }
+
+.actionable--small {
+   font-size: calculateRem(12px);
+}
+
+.actionable--large {
+    font-size: $inuit-base-spacing-unit--large;
+}
+
+.actionable--huge {
+    font-size: $inuit-base-spacing-unit--huge;
+}

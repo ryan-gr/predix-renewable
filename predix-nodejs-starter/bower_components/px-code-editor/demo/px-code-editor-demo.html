@@ -1,0 +1,93 @@
+<!-- Common imports -->
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../px-icon-set/px-icon-set.html" />
+
+<!-- Common demo imports -->
+<link rel="import" href="../../px-demo/px-demo-header.html" />
+<link rel="import" href="../../px-demo/px-demo-api-viewer.html" />
+<link rel="import" href="../../px-demo/px-demo-footer.html" />
+<link rel="import" href="../../px-demo/px-demo-configs.html" />
+<link rel="import" href="../../px-demo/px-demo-props.html" />
+<link rel="import" href="../../px-demo/px-demo-interactive.html" />
+<link rel="import" href="../../px-demo/px-demo-component-snippet.html" />
+
+
+<!-- Imports for this component -->
+<link rel="import" href="../px-code-editor.html" />
+
+<!-- Demo DOM module -->
+<dom-module id="px-code-editor-demo">
+  <template>
+
+    <!-- Header -->
+    <px-demo-header
+        module-name="px-code-editor"
+        description="px-code-editor is a web component that provides a rich code editor. px-code-editor wraps around the open source CodeMirror editor and exposes a simple attribute and event based API for configuration and use.">
+    </px-demo-header>
+
+    <!-- Interactive -->
+    <px-demo-interactive>
+      <!-- Configs -->
+      <px-demo-configs slot="px-demo-configs" configs="[[configs]]" props="{{props}}" chosen-config="{{chosenConfig}}"></px-demo-configs>
+
+      <!-- Props -->
+      <px-demo-props slot="px-demo-props" props="{{props}}" config="[[chosenConfig]]"></px-demo-props>
+
+      <!-- Component ---------------------------------------------------------->
+      <px-demo-component slot="px-demo-component" class="flex__item flex flex--col">
+        <!-- <div class="flex__item flex"> -->
+          <px-code-editor
+              value="{{props.value.value}}"
+              mode="{{props.mode.value}}">
+          </px-code-editor>
+        <!-- </div> -->
+      </px-demo-component>
+      <!-- END Component ------------------------------------------------------>
+
+      <px-demo-component-snippet
+          slot="px-demo-component-snippet"
+          element-properties="{{props}}"
+          element-name="px-code-editor">
+      </px-demo-component-snippet>
+    </px-demo-interactive>
+
+    <!-- API Viewer -->
+    <px-demo-api-viewer source="px-code-editor"></px-demo-api-viewer>
+
+    <!-- Footer -->
+    <px-demo-footer></px-demo-footer>
+  </template>
+
+</dom-module>
+<script>
+  Polymer({
+    is: 'px-code-editor-demo',
+
+    properties: {
+      props: {
+        type: Object,
+        value: () => ({
+          value: {
+            type: String,
+            defaultValue: 'function convertJSONToString(source) { try { return JSON.stringify(source); } catch (err) { return new Error("Unable to convert JSON: " + err.toString()); } }',
+            inputType: 'text'
+          },
+          mode: {
+            type: String,
+            defaultValue: 'javascript',
+            inputChoices: ['javascript','text/html'],
+            inputType: 'dropdown'
+          }
+        })
+      },
+
+      configs: {
+        type: Array,
+        value: () => ([
+          { configName: "Default",
+            configReset: true }
+        ])
+      }
+    }
+  });
+</script>

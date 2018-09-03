@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Example: px-code-editor</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../polymer/polymer.html"/>
+  <link rel="import" href="../../px-theme/px-theme-styles.html"/>
+  <link rel="import" href="../px-code-editor.html"/>
+</head>
+<body>
+  <custom-style>
+    <style is="custom-style" include="px-theme-styles"></style>
+  </custom-style>
+  <style>
+    .code-editor {
+      display: block;
+      width: 100%;
+      height: 300px;
+    }
+  </style>
+
+  <h1>HTML Editor</h1>
+  <px-code-editor class="code-editor" mode="text/html" id="htmlEditor"></px-code-editor>
+
+  <h1>JavaScript Editor</h1>
+  <px-code-editor class="code-editor" mode="javascript" id="jsEditor"></px-code-editor>
+
+  <script>
+    var htmlEditor = document.getElementById('htmlEditor');
+    var jsEditor = document.getElementById('jsEditor');
+
+    var htmlCode = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Hello!</h1>
+</body>
+</html>
+    `.trim();
+    htmlEditor.value = htmlCode;
+
+    var jsCode = `
+Polymer({
+  is: 'px-code-editor',
+  properties: {
+    mode: {
+      type: String,
+      observer: '_modeChanged'
+    },
+    value: {
+      type: String,
+      observer: '_valueChanged',
+      notify: true
+    },
+    autoIndent: {
+      type: Boolean,
+      value: false
+    },
+    tabSize: {
+      type: Number,
+      value: 2
+    },
+    editor: {
+      type: Object,
+      readOnly: true,
+      notify: true
+    }
+  },
+  _valueChanged(value) {
+    if (typeof value === 'string') {
+      if (!this.editor) {
+        this._initializeEditor();
+        return;
+      }
+      if (this.editor.getValue() !== value) {
+        this.editor.setValue(value);
+      }
+    }
+  },
+  _modeChanged(mode) {
+    if (typeof value === 'string') {
+      if (!this.editor) {
+        this._initializeEditor();
+      } else {
+        this.editor.setOption({ mode });
+      }
+    }
+  },
+  _initializeEditor() {
+    if (!this.editor && typeof this.value === 'string' && typeof this.mode === 'string') {
+      this.scopeSubtree(this.$.editorContainer, true);
+      let editor = CodeMirror(this.$.editorContainer, {
+        mode: this.mode,
+        value: this.value,
+        theme: 'predix',
+        lineWrapping: true,
+        lineNumbers: true
+      });
+      this._setEditor(editor);
+      editor.on('changes', this._handleEditorChanges.bind(this));
+    }
+  },
+  _handleEditorChanges(e) {
+    this.debounce('handle-editor-changes', () => {
+      const value = this.editor.getValue();
+      this.fire('px-code-editor-updated', {value});
+      this.value = value;
+    }, 20);
+  }
+});
+    `.trim();
+    jsEditor.value = jsCode;
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+{
+  "name": "px-demo",
+  "version": "3.1.2",
+  "main": [
+    "px-demo.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test",
+    "OSS_Notice.pdf",
+    "scripts",
+    ".github",
+    "px-demo.png",
+    "*.md",
+    ".jshintrc",
+    ".editorconfig",
+    "wct.conf.json"
+  ],
+  "dependencies": {
+    "polymer": "1.9 - 2",
+    "px-theme": "^3.0.0",
+    "px-dropdown": "^4.0.0",
+    "px-demo-snippet": "^1.0.0",
+    "px-api-viewer": "^2.0.0",
+    "px-tabs": "^2.0.0",
+    "px-demo-design": "^2.0.6",
+    "iron-a11y-keys": "^2.0.0",
+    "px-code-editor": "^4.0.0",
+    "px-view-header": "^2.0.0",
+    "px-deck-selector": "^2.0.0",
+    "px-typeahead": "^2.0.0",
+    "px-toggle": "^2.0.0",
+    "px-app-helpers": "^2.1.0",
+    "px-modal": "^3.0.0",
+    "js-beautify": "beautify-web/js-beautify#^1.7.5"
+  },
+  "devDependencies": {
+    "px-forms-design": "^2.0.0",
+    "px-tables-design": "^2.0.0",
+    "px-icon-set": "^2.0.0",
+    "px-list-inline-design": "^1.0.0",
+    "px-toggle-design": "^2.0.0",
+    "px-headings-design": "^1.0.0",
+    "px-actionable-design": "^2.0.0",
+    "px-code-design": "^2.0.0",
+    "px-meta-lists-design": "^1.0.0",
+    "px-starter-kit-design": "^1.0.0",
+    "iron-demo-helpers": "^2.0.0",
+    "px-buttons-design": "^2.0.0",
+    "web-component-tester": "^6.3.0",
+    "px-calendar-picker": "^2.0.2"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  }
+}

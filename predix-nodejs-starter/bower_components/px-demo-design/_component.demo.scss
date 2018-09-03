@@ -1,0 +1,191 @@
+////
+/// PX-DEMO-DESIGN
+/// Defines styles for component documention pages.
+/// @group px-demo-design
+////
+
+@import "px-defaults-design/_settings.defaults.scss";
+@import "px-colors-design/_settings.colors.scss";
+
+.demo-text--light {
+  color: $white;
+}
+
+.demo-text--dark {
+  color: $black;
+}
+
+.demo-text--gray {
+  color: var(--px-demo-text-gray-color, $gray13);
+}
+
+.demo-background--base{
+  background-color: var(--px-demo-base-background-color, $white);
+}
+
+.demo-background--api {
+  background-color: var(--px-demo-api-background-color, $white);
+}
+
+.demo-background--interactive{
+  background-color: var(--px-demo-interactive-background-color, $gray1);
+}
+
+.demo-u-pb\00002b\00002b\00002b{
+  padding-bottom: calculateRem(60px);
+}
+
+.demo-margin-top-huge {
+  margin-top: $inuit-base-spacing-unit*5;
+}
+
+.demo-text-width--max{
+  max-width: calculateRem(700px);
+}
+
+.demo-container-flex {
+  display: flex;
+}
+
+.demo-properties-container {
+  background: var(--px-demo-properties-background-color, $white);
+  border: 1px solid var(--px-demo-containers-border-color, $gray4);
+  overflow-y: hidden;
+  margin-right: calculateRem(20px);
+  margin-top: calculateRem(20px);
+  min-width: calculateRem(300px);
+  padding: 0 $inuit-base-spacing-unit--huge $inuit-base-spacing-unit--large;
+  position: relative;
+}.demo-properties-container:hover {
+  overflow-y: auto;
+}
+.demo-properties {
+  position: absolute;
+  max-width: calculateRem(238px);
+  padding-bottom: $inuit-base-spacing-unit--large;
+  width: 100%;
+}
+
+.demo-component-code-container {
+  min-width: 0;
+  width: 100%;
+}
+
+.demo-component-container{
+  min-height: calculateRem(400px);
+  background: var(--px-demo-component-background-color, $white);
+  border: 1px solid var(--px-demo-containers-border-color, $gray4);
+  overflow: auto;
+}
+
+.demo-associated {
+  :first-of-type {
+    margin-right: calculateRem(50px);
+  }
+}
+
+.demo-hr {
+  border: 0;
+  border-top: 1px solid var(--px-demo-containers-border-color, $gray4);
+}
+
+.demo-layout--center {
+  width: 80%;
+  margin: 0 auto;
+  max-width: calculateRem(1200px);
+}
+
+.demo-overflow-visible{
+  overflow: visible;
+}
+
+/*-------------------------
+Footer demo styles
+--------------------------*/
+.demo-footer__container {
+  flex-basis: 90%;
+  color:  var(--px-footer-text-color, $gray10);
+  font-size: 12px;
+  align-items: center;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.demo-background--footer {
+  background-color: var(--px-footer-background-color, $gray1);
+}
+
+:host {
+  --px-actionable-alt-text-color: var(--demo-footer-actionable-text-color, $gray10);
+}
+
+.demo-footer__img {
+  width: 150px;
+}
+
+/*-------------------------
+Color demo styles
+--------------------------*/
+
+.demo-color-swatch {
+  margin-right: 10px;
+  height: 30px;
+  padding-left: 8px;
+  flex: 1 0 auto;
+}
+
+.demo-color-swatch-label {
+  width: 140px;
+  text-align: left;
+}
+
+.demo-color-swatch--container {
+  line-height: 30px;
+  height: 30px;
+  white-space: nowrap;
+  display: flex;
+}
+
+/*-------------------------
+Shadow demo styles
+--------------------------*/
+.demo-shadow__box{
+  width: 40%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.demo-shadow__box--background{
+  background: var(--px-demo-shadow__box--background, $white);
+}
+
+/*-------------------------
+Style for screen smaller than 672px
+--------------------------*/
+@media screen  and (max-width: calculateRem(672px)){
+
+  .demo-container-flex {
+    flex-direction: column;
+  }
+
+  .demo-properties-container {
+    margin-right: 0px;
+  }
+  .demo-properties {
+    position: static;
+    padding-right: 0;
+    max-width: none;
+  }
+
+  .demo-footer__container {
+    flex-direction: column;
+  }
+
+  .demo-footer__list {
+    padding-top: $inuit-base-spacing-unit--small;
+    text-align: center;
+  }
+  .demo-shadow__box {
+    width: 100%;
+  }
+}

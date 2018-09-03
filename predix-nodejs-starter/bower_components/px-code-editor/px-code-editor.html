@@ -1,0 +1,94 @@
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="codemirror/import.html"/>
+<link rel="import" href="css/px-code-editor-styles.html"/>
+
+<dom-module id="px-code-editor">
+  <template>
+    <style include="px-code-editor-styles"></style>
+    <div id="editorContainer"></div>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'px-code-editor',
+    properties: {
+      /**
+       * Set to the programming language the code editor `value` will be
+       * written in. Choose from "javascript", "text/html", or "text/css".
+       */
+      mode: {
+        type: String,
+        observer: '_modeChanged'
+      },
+      /**
+       * Set to update the code in the editor. Listen for updates to be
+       * notified when the user changes the code in the editor.
+       */
+      value: {
+        type: String,
+        observer: '_valueChanged',
+        notify: true
+      },
+      /**
+       * Reference to the CodeMirror editor instance that is controlling
+       * the code editor. See the [CodeMirror](http://codemirror.net/) site for
+       * more information on the settings you can change on this instance.
+       */
+      editor: {
+        type: Object,
+        readOnly: true,
+        notify: true
+      }
+    },
+    _valueChanged(value) {
+      if (typeof value === 'string') {
+        if (!this.editor) {
+          this._initializeEditor();
+          return;
+        }
+        if (this.editor.getValue() !== value) {
+          this.editor.setValue(value);
+          this._refresh();
+        }
+      }
+    },
+    _modeChanged(mode) {
+      if (typeof mode === 'string') {
+        if (!this.editor) {
+          this._initializeEditor();
+        } else {
+          this.editor.setOption('mode', mode);
+        }
+      }
+    },
+    _initializeEditor() {
+      if (!this.editor && typeof this.value === 'string' && typeof this.mode === 'string') {
+        this.scopeSubtree(this.$.editorContainer, true);
+        let editor = CodeMirror(this.$.editorContainer, {
+          mode: this.mode,
+          value: this.value,
+          theme: 'predix',
+          lineWrapping: false,
+          lineNumbers: false /* Line numbers sizing does not work in Shady DOM */
+        });
+        this._setEditor(editor);
+        editor.on('changes', this._onEditorChanges.bind(this));
+        this._refresh();
+      }
+    },
+    _refresh() {
+      // `refresh()` the CodeMirror instance after initial render to ensure
+      // the text is visible. See issues #1 and #3.
+      Polymer.RenderStatus.afterNextRender(this, () => {
+        this.editor.refresh();
+      });
+    },
+    _onEditorChanges(e) {
+      this.debounce('handle-editor-changes', () => {
+        const value = this.editor.getValue();
+        this.fire('px-code-editor-updated', {value});
+        this.value = value;
+      }, 20);
+    }
+  });
+</script>

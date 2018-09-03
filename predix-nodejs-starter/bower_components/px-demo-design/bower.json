@@ -1,0 +1,39 @@
+{
+  "name": "px-demo-design",
+  "version": "2.0.6",
+  "authors": [
+    "General Electric"
+  ],
+  "description": "One sass file for all of PX component demo pages",
+  "main": "_component.demo.scss",
+  "keywords": [
+    "px",
+    "sass",
+    "demo",
+    "page"
+  ],
+  "private": false,
+  "ignore": [
+    "*.enc",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "sass",
+    ".github",
+    "OSS_Notice.pdf"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "px-defaults-design": "^2.0.0",
+    "px-colors-design": "^1.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-helpers-design": "^1.0.0",
+    "px-flexbox-design": "^1.0.0",
+    "px-viewport-design": "^1.0.0",
+    "px-spacing-responsive-design": "^1.0.0",
+    "px-widths-responsive-design": "^1.0.0",
+    "px-buttons-design": "^2.0.0",
+    "px-icon-set": "^2.0.0"
+  }
+}

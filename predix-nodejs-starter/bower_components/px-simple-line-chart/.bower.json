@@ -1,0 +1,62 @@
+{
+  "name": "px-simple-line-chart",
+  "version": "2.1.1",
+  "main": [
+    "px-simple-line-chart.html"
+  ],
+  "ignore": [
+    "*.enc",
+    "**/.*",
+    "bower_components",
+    "node_modules",
+    "sass",
+    "*.md",
+    "scripts",
+    ".github",
+    "gulpfile.js",
+    "wct.conf.json",
+    "test",
+    "OSS_Notice.pdf",
+    "*.png",
+    "npm-debug.log"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "d3": "^3.0.0",
+    "px-simple-chart-common-behavior": "^2.1.1"
+  },
+  "devDependencies": {
+    "px-normalize-design": "^1.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-theme": "^3.0.0",
+    "px-demo": "^3.0.0",
+    "web-component-tester": "^6.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.24"
+      }
+    }
+  },
+  "homepage": "https://github.com/predixdesignsystem/px-simple-line-chart",
+  "_release": "2.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.1.1",
+    "commit": "1021b9ed52ed3e6f500c723c8076e8ef32c1b5ba"
+  },
+  "_source": "https://github.com/predixdesignsystem/px-simple-line-chart.git",
+  "_target": "^2.1.1",
+  "_originalSource": "px-simple-line-chart",
+  "_direct": true
+}

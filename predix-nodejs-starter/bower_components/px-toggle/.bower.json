@@ -1,0 +1,66 @@
+{
+  "name": "px-toggle",
+  "version": "2.2.0",
+  "main": [
+    "px-toggle.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test",
+    "OSS_Notice.pdf",
+    "scripts",
+    ".github",
+    "px-toggle.png",
+    "LICENSE.md",
+    "CONTRIBUTING.md",
+    "HISTORY.md",
+    "README.md",
+    ".jshintrc",
+    ".editorconfig"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "px-theme": "^3.0.0",
+    "iron-label": "^2.0.0",
+    "iron-checked-element-behavior": "^2.0.0"
+  },
+  "devDependencies": {
+    "px-toggle-design": "^2.0.0",
+    "px-box-sizing-design": "^1.0.2",
+    "web-component-tester": "^6.3.0",
+    "px-normalize-design": "^1.0.2",
+    "px-demo": "^3.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "homepage": "https://github.com/predixdesignsystem/px-toggle",
+  "_release": "2.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.2.0",
+    "commit": "97ae179026e9522e13cfd0f2afc8676064f515f4"
+  },
+  "_source": "https://github.com/predixdesignsystem/px-toggle.git",
+  "_target": "^2.0.0",
+  "_originalSource": "px-toggle"
+}

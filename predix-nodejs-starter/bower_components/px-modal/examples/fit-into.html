@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>px-modal demo</title>
+
+  <!-- Load webcomponentsjs + Polymer -->
+  <script>
+  (function() {
+    'use strict';
+
+    var onload = function() {
+      // For native Imports, manually fire WebComponentsReady so user code
+      // can use the same code path for native and polyfill'd imports.
+      if (!window.HTMLImports) {
+        document.dispatchEvent(
+          new CustomEvent('WebComponentsReady', {bubbles: true})
+        );
+      }
+    };
+
+    var webComponentsSupported = (
+      'registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')
+    );
+
+    if (!webComponentsSupported) {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = '../../webcomponentsjs/webcomponents-lite.js';
+      script.onload = onload;
+      document.head.appendChild(script);
+    } else {
+      onload();
+    }
+  })();
+  </script>
+  <link rel="import" href="../../polymer/polymer.html"/>
+  <link rel="import" href="../../polymer/lib/elements/dom-bind.html"/>
+
+  <!-- Load components -->
+  <link rel="import" href="../px-modal.html"/>
+  <link rel="import" href="../px-modal-trigger.html"/>
+
+  <style>
+    html, body {
+      font-size: 15px;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    .container {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: 40px 1fr;
+    }
+    .header {
+      display: block;
+      width: 100%;
+      background-color: red;
+      grid-column: 1 / -1; /* always full width */
+      grid-row: 1;
+    }
+    .sidebar {
+      display: block;
+      height: 100%;
+      grid-column: 1;
+      background-color: blue;
+    }
+    .content {
+      background-color: orange;
+      grid-column: 2 / -1;
+    }
+
+  </style>
+
+  <!-- Load theme -->
+  <link rel="import" href="../../px-theme/px-theme-styles.html"/>
+  <custom-style>
+    <style include="px-theme-styles" is="custom-style"></style>
+  </custom-style>
+</head>
+<body>
+  <div class="container">
+    <div class="header"></div>
+    <div class="sidebar"></div>
+    <div class="content" id="container">
+      <px-modal
+          header-text="Magna Adipiscing"
+          accept-text="Submit"
+          reject-text="Cancel">
+        <div slot="body">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae a, commodi necessitatibus ullam earum error laudantium, quia quidem aliquid recusandae. In molestias velit eum eaque deleniti quo esse tempora incidunt.
+        </div>
+      </px-modal>
+      <px-modal-trigger type="open">
+        <button>Open modal</button>
+      </px-modal-trigger>
+    </div>
+  </div>
+  <script>
+    const modal = document.querySelector('px-modal');
+    const trigger = document.querySelector('px-modal-trigger');
+    const container = document.querySelector('#container');
+    modal.openTrigger = trigger;
+    modal.fillContainer = true;
+    modal.set('fitInto', container);
+  </script>
+</body>
+</html>

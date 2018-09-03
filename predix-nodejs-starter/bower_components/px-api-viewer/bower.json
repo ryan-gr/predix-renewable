@@ -1,0 +1,52 @@
+{
+  "name": "px-api-viewer",
+  "version": "2.1.4",
+  "main": [
+    "px-api-viewer.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test",
+    ".git",
+    "scripts",
+    ".github"
+  ],
+  "dependencies": {
+    "iron-doc-viewer": "^3.0.0",
+    "polymer": "#1.9 - 2",
+    "px-icon-set": "^2.1.0",
+    "px-theme": "^3.0.0",
+    "iron-ajax": "^2.0.4",
+    "iron-location": "^2.0.1"
+  },
+  "devDependencies": {
+    "px-box-sizing-design": "^1.0.0",
+    "px-colors-design": "^1.0.0",
+    "px-defaults-design": "^2.0.0",
+    "px-normalize-design": "^1.0.0",
+    "web-component-tester": "^6.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title></title>
+    <script type="text/javascript">
+    (function() {
+      'use strict';
+
+      var onload = function() {
+        // For native Imports, manually fire WebComponentsReady so user code
+        // can use the same code path for native and polyfill'd imports.
+        if (!window.HTMLImports) {
+          document.dispatchEvent(
+            new CustomEvent('WebComponentsReady', {bubbles: true})
+          );
+        }
+      };
+
+      var webComponentsSupported = (
+        'registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')
+      );
+
+      if (!webComponentsSupported) {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '../webcomponentsjs/webcomponents-lite.js';
+        script.onload = onload;
+        document.head.appendChild(script);
+      } else {
+        onload();
+      }
+    })();
+    </script>
+
+    <!--
+      Load the Polymer library.
+    -->
+    <link rel="import" href="../polymer/polymer.html" />
+    <link rel="import" href="../px-theme/px-theme-styles.html" />
+    <link rel="import" href="../px-icon-set/px-icon.html"/>
+    <link rel="import" href="../px-icon-set/px-icon-set.html"/>
+    <link rel="import" href="../px-deck-selector/px-deck-selector.html"/>
+    <custom-style>
+      <style include="px-theme-styles" is="custom-style"></style>
+    </custom-style>
+
+    <link rel="import" href="px-view-header.html" />
+  </head>
+  <body>
+     <!-- <px-view-header title="Current View Title" subtitle="A subtitle describing the view.">
+      <div slot='left' class='actionable'>
+        <px-icon icon='px-nav:back'></px-icon> Back</div>
+      <div slot='right' class='actionable'>Next <px-icon icon='px-nav:next'></px-icon>
+      </div>
+    </px-view-header> -->
+    <px-view-header use-deck-selector>
+      <px-deck-selector slot="center" decks='[{"id":"1","name":"Overview","url":"/overview"}]'></px-deck-selector>
+    </px-view-header>
+  </body>
+</html>

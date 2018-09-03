@@ -1,0 +1,67 @@
+{
+  "name": "px-typeahead",
+  "version": "2.3.1",
+  "main": [
+    "px-typeahead.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test",
+    "scripts"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "iron-ajax": "^2.0.0",
+    "iron-resizable-behavior": "^2.0.0",
+    "px-icon-set": "^2.0.0",
+    "promise-polyfill": "polymerlabs/promise-polyfill#^2.0.0"
+  },
+  "devDependencies": {
+    "px-theme": "^3.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-helpers-design": "^1.0.0",
+    "px-flexbox-design": "^1.0.0",
+    "px-viewport-design": "^1.0.0",
+    "px-forms-design": "^2.0.0",
+    "px-list-bare-design": "^1.0.0",
+    "px-spacing-design": "^1.0.0",
+    "px-list-ui-design": "^2.0.0",
+    "web-component-tester": "^6.3.0",
+    "iron-test-helpers": "^2.0.0",
+    "px-demo": "^3.0.4"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0",
+    "promise-polyfill": "^2.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "homepage": "https://github.com/predixdesignsystem/px-typeahead",
+  "_release": "2.3.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.3.1",
+    "commit": "c4ee087f0c9810583adef94a268cac8d4a20ad42"
+  },
+  "_source": "https://github.com/predixdesignsystem/px-typeahead.git",
+  "_target": "^2.0.0",
+  "_originalSource": "px-typeahead"
+}

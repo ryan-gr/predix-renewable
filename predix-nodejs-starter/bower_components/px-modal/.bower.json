@@ -1,0 +1,66 @@
+{
+  "name": "px-modal",
+  "version": "3.3.4",
+  "main": [
+    "px-modal.html"
+  ],
+  "ignore": [
+    "*.enc",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "sass",
+    "*.md",
+    "scripts",
+    ".github",
+    "gulpfile.js",
+    "wct.conf.json",
+    "test",
+    "OSS_Notice.pdf",
+    "*.png",
+    "npm-debug.log"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "iron-fit-behavior": "^2.1.0"
+  },
+  "devDependencies": {
+    "px-theme": "^3.0.0",
+    "px-demo": "^3.0.0",
+    "px-normalize-design": "^1.0.2",
+    "px-box-sizing-design": "^1.0.2",
+    "px-helpers-design": "^1.0.7",
+    "px-buttons-design": "^2.0.5",
+    "px-headings-design": "^1.0.3",
+    "web-component-tester": "^6.4.0",
+    "iron-test-helpers": "^2.0.0",
+    "px-shadows-design": "^1.0.2"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^0.7.24"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/predixdesignsystem/px-modal",
+  "_release": "3.3.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.3.4",
+    "commit": "2213c991568a39291b3b25f5308c58ed0d3fef7b"
+  },
+  "_source": "https://github.com/predixdesignsystem/px-modal.git",
+  "_target": "^3.0.0",
+  "_originalSource": "px-modal"
+}

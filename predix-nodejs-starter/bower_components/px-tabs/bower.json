@@ -1,0 +1,51 @@
+{
+  "name": "px-tabs",
+  "version": "2.1.2",
+  "main": [
+    "px-tabs.html"
+  ],
+  "ignore": [
+    "*.enc",
+    "**/.*",
+    "bower_components",
+    "node_modules",
+    "gulpfile.js",
+    "sass",
+    "*.md",
+    "test",
+    "scripts",
+    ".github",
+    "OSS_Notice.pdf",
+    "wct.conf.json",
+    "*.png",
+    "npm-debug.log"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "iron-a11y-keys": "^2.0.0",
+    "iron-pages": "^2.0.0"
+  },
+  "devDependencies": {
+    "px-demo": "^3.0.0",
+    "px-starter-kit-design": "^1.0.0",
+    "px-theme": "^3.0.0",
+    "web-component-tester": "^6.3.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "license": "BSD-3-Clause"
+}

@@ -1,0 +1,155 @@
+<!-- Common imports -->
+<link rel="import" href="../../polymer/polymer.html" />
+
+<!-- Common demo imports -->
+<link rel="import" href="../../px-sass-doc/px-sass-doc.html" />
+<link rel="import" href="../css/px-actionable-design-demo-styles.html" />
+<link rel="import" href="../../px-icon-set/px-icon-set.html"/>
+<link rel="import" href="../../px-icon-set/px-icon.html"/>
+
+<!-- Demo DOM module -->
+<dom-module id="px-actionable-design-demo">
+  <template>
+  <!-- 0: Import the styles-->
+  <style include="px-actionable-design-demo-styles" is="custom-style"></style>
+
+<!-- 1: Describe Module -->
+<px-sass-doc
+  module-name="px-actionable-design"
+  description="Predix UI Actionable module is a simple implementation of added button type behaviors to text. Actionable text allows the user to initiate an secondary action associated to the text string."
+  layer="objects"
+  sassdoc-path="sassdoc.json"
+  dependencies='[
+    "https://github.com/PredixDev/px-colors-design",
+    "https://github.com/PredixDev/px-defaults-design"
+  ]'
+  selected-options="{{selectedOptions}}">
+
+<!-- 2: Set Options -->
+<px-sass-doc-option slot="options"
+  option-name="Size"
+  choose-with="dropdown"
+  choices='[
+    "small",
+    "regular (default)",
+    "large",
+    "huge"
+  ]'
+  default-choice="regular (default)">
+</px-sass-doc-option>
+<px-sass-doc-option slot="options"
+  option-name="Type"
+  choose-with="dropdown"
+  choices='[
+    "primary",
+    "select",
+    "secondary"
+  ]'
+  default-choice="primary">
+</px-sass-doc-option>
+<px-sass-doc-option slot="options"
+  option-name="Disabled"
+  choose-with="boolean"
+  default-choice="false">
+</px-sass-doc-option>
+
+<!-- 3: Make HTML Demo -->
+<section slot="demo-html">
+<a class$="{{cssClasses}}">Actionable Text</a>
+<p class$="{{cssClasses}}">
+  <px-icon icon="px-fea:analysis"></px-icon>
+</p>
+</section>
+
+<!-- 4: Set Import Slot -->
+<section slot="import">
+{{importCode}}
+</section>
+
+<!-- 5: Set Usage HTML -->
+<section slot="usage">
+```
+<!-- Default Actionable Text & Icon -->
+<span class="actionable">…</span>
+<span class="actionable">
+  <px-icon icon="px-fea:analysis"></px-icon>
+</span>
+
+
+<!-- Small -->
+<span class="actionable actionable--small">…</span>
+
+
+<!-- Large -->
+<span class="actionable actionable--large">…</span>
+
+
+<!-- Huge -->
+<span class="actionable actionable--huge">…</span>
+
+
+<!-- Secondary -->
+<span class="actionable actionable--secondary">…</span>
+
+
+<!-- Select -->
+<span class="actionable actionable--select">…</span>
+
+
+<!-- Disabled -->
+<span class="actionable actionable--disabled">…</span>
+
+```
+</section>
+
+</px-sass-doc>
+</template>
+
+</dom-module>
+
+<!-- 6: Handle selectedOptions, update demo -->
+<script>
+  Polymer({
+    is: 'px-actionable-design-demo',
+
+    attached : function(){
+      var boundHandler = this._handleOptionsUpdated.bind(this);
+      this.addEventListener('px-sass-doc-options-updated', boundHandler)
+    },
+
+    detached : function(){
+      this.removeEventListener('px-sass-doc-options-updated', boundHandler);
+    },
+
+    _handleOptionsUpdated : function(evt) {
+      //call functions created below
+      this.cssClasses = this._calcCssClasses();
+      this.importCode = this._importCode();
+
+      // Wait, then tell the highlighter to run after dom-if restamps
+      this.async(function(){ this.fire('px-sass-doc-demo-updated', {}) }, 10);
+    },
+
+    _calcCssClasses : function() {
+      var opts = this.selectedOptions || {}, strings = [];
+
+      if (opts.Size === "small")    strings.push("actionable--small");
+      if (opts.Size === "large")    strings.push("actionable--large");
+      if (opts.Size === "huge")     strings.push("actionable--huge");
+
+      if (opts.Type === "select")    strings.push("actionable--select");
+      if (opts.Type === "secondary")    strings.push("actionable--secondary");
+
+      if (opts.Disabled === true)    strings.push("actionable--disabled");
+
+      return ("actionable " + strings.join(" ")).trim();
+    },
+
+    _importCode : function() {
+      var opts = this.selectedOptions || {}, strings = [];
+
+      return (strings.join("\n") + "\n@import 'px-actionable-design/_objects.actionable.scss';").trim();
+    },
+
+  });
+</script>
