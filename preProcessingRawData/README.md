@@ -1,8 +1,8 @@
 # PreProcessing of raw Data
-contains:
-  60030099999.csv-raw data downloaded from NCEI</br>
-  dataPredix-CLaned data</br>
-  PreprocessinR.R- R code</br>
+contains:</br>
+  60030099999.csv - raw data downloaded from NCEI</br>
+  dataPredix.csv - cleaned data</br>
+  PreprocessinR.R - R code</br>
 
 ## DataCollection
 From the website National Centers for Environmental Information(NCEI), we were able to obtain half hourly data for Gran Canaria Airport, Spain in the last 7 months. https://www.ncei.noaa.gov/data/global-hourly/access/2018/60030099999.csv. 
