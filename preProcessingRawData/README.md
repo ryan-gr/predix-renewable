@@ -1,6 +1,6 @@
 # PreProcessing of raw Data
 contains:
-  60030099999.csv-raw data downloaded from NCEI
+  60030099999.csv-raw data downloaded from NCEI/n
   dataPredix-CLaned data
   PreprocessinR.R- R code
 
