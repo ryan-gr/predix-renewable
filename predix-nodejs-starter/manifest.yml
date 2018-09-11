@@ -7,13 +7,14 @@ applications:
   command:  node server/app.js
 services:
   - ryan-uaa
+  - ryan-time-series
  # - your-name-time-series
  # - your-name-asset
 env:
     node_env: cloud
     uaa_service_label : predix-uaa
     clientId: ryan-client
-    base64ClientCredential: Y2xpZW50SWQ6amFzb24=
+    base64ClientCredential: cnlhbi1jbGllbnQ6amFzb24=
     # Following properties configured only for Timeseries WindData service Integration
     #windServiceUrl: "{URL of the microservice <your-name>-winddata-timeseries-service}, e.g.  https://your-name-winddata-timeseries-service.run.asw-usw02-pr.predix.io"
     windServiceYearlyApi : /services/windservices/yearly_data/sensor_id/
