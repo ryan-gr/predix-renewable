@@ -8,6 +8,7 @@ applications:
 services:
   - ryan-uaa
   - ryan-time-series
+  - ryan-analytics-framework
  # - your-name-time-series
  # - your-name-asset
 env:
@@ -17,5 +18,5 @@ env:
     base64ClientCredential: cnlhbi1jbGllbnQ6amFzb24=
     # Following properties configured only for Timeseries WindData service Integration
     #windServiceUrl: "{URL of the microservice <your-name>-winddata-timeseries-service}, e.g.  https://your-name-winddata-timeseries-service.run.asw-usw02-pr.predix.io"
-    windServiceYearlyApi : /services/windservices/yearly_data/sensor_id/
-    winddatatag : "Compressor-2015:CompressionRatio"
+    #windServiceYearlyApi : /services/windservices/yearly_data/sensor_id/
+    #winddatatag : "Compressor-2015:CompressionRatio"
