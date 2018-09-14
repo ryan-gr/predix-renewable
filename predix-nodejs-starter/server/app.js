@@ -137,9 +137,7 @@ if (config.isUaaConfigured()) {
       if(!windServiceURL) {
         configuration.connectToTimeseries = "true";
       }
-      if(config.assetURL && config.assetZoneId) {
-        configuration.isConnectedAssetEnabled = "true";
-      }
+      configuration.isConnectedAssetEnabled = "false";
       res.send(JSON.stringify(configuration));
 
     });

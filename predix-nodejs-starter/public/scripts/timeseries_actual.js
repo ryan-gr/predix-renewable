@@ -88,6 +88,7 @@ const getDataWithRange = (epochStart, epochEnd) => {
 
 const getPredictedValue = (data) => {
 	const analyticsRequest = new XMLHttpRequest();
+  //TODO: move the query to a local route to hide the zone-id?
 	analyticsRequest.open('POST', '/predix-api/predix-analytics-framework/api/v1/catalog/analytics/5a6391ad-6967-4dcd-bbd5-ca54bbcc89b0/execution', true);
 
 	analyticsRequest.onload = function() {

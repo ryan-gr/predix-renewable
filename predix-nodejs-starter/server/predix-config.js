@@ -21,8 +21,6 @@ if(node_env === 'development') {
 	settings.appURL = devConfig.appURL;
 	settings.callbackURL = devConfig.appURL + '/callback';
 
-	settings.assetURL = devConfig.assetURL;
-	settings.assetZoneId = devConfig.assetZoneId;
 	settings.timeseriesZoneId = devConfig.timeseriesZoneId;
 	settings.timeseriesURL = devConfig.timeseriesURL;
 	settings.analyticsZoneId = devConfig.analyticsZoneId;
@@ -32,17 +30,12 @@ if(node_env === 'development') {
 	// read VCAP_SERVICES
 	var vcapsServices = JSON.parse(process.env.VCAP_SERVICES);
 	var uaaService = vcapsServices[process.env.uaa_service_label];
-	var assetService = vcapsServices['predix-asset'];
 	var timeseriesService = vcapsServices['predix-timeseries'];
 	var analyticsService = vcapsServices['predix-analytics-framework'];
 
 	if(uaaService) {
     settings.uaaURL = uaaService[0].credentials.uri;
 		settings.tokenURL = uaaService[0].credentials.uri;
-	}
-	if(assetService) {
-		settings.assetURL = assetService[0].credentials.uri + '/' + process.env.assetMachine;
-		settings.assetZoneId = assetService[0].credentials.zone['http-header-value'];
 	}
 	if(timeseriesService) {
 		settings.timeseriesZoneId = timeseriesService[0].credentials.query['zone-http-header-value'];
@@ -90,16 +83,6 @@ settings.buildVcapObjectFromLocalConfig = function(config) {
 				query: {
 					uri: config.analyticsURL,
 					'zone-http-header-value': config.analyticsZoneId
-				}
-			}
-		}];
-	}
-	if (config.assetURL) {
-		vcapObj['predix-asset'] = [{
-			credentials: {
-				uri: config.assetURL,
-				zone: {
-					'http-header-value': config.assetZoneId
 				}
 			}
 		}];

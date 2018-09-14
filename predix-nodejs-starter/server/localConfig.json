@@ -5,11 +5,8 @@
     "base64ClientCredential": "cnlhbi1jbGllbnQ6amFzb24=",
     "appURL": "http://localhost:5000",
     "timeseriesURL": "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io",
-    "assetZoneId": "{The Zone ID for the Asset Service Created}",
     "timeseriesZoneId": "beaa2675-862a-41eb-b316-32486b551439",
     "analyticsURL": "https://predix-analytics-catalog-release.run.aws-usw02-pr.ice.predix.io",
-    "analyticsZoneId": "3a180485-cb3d-45ab-a746-2138ab336b0a",
-    "assetURL": "{Asset URL from VCAPS}",
-    "windServiceURL": "{URL of the microservice <your-name>-winddata-timeseries-service}, e.g.  https://your-name-winddata-timeseries-service.run.asw-usw02-pr.predix.io"
+    "analyticsZoneId": "3a180485-cb3d-45ab-a746-2138ab336b0a"
   }
 }

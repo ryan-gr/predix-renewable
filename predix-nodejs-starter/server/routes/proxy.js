@@ -95,17 +95,20 @@ function getEndpointAndZone(key, credentials) {
 	var out = {};
 	// ugly code needed since vcap service variables are not consistent across services
 	// TODO: all the other predix services
-	if (key === 'predix-asset') {
-		out.serviceEndpoint = credentials.uri;
-		out.zoneId = credentials.zone['http-header-value'];
-	} else if (key === 'predix-timeseries') {
+ 	if (key === 'predix-timeseries') {
 		var urlObj = url.parse(credentials.query.uri);
 		out.serviceEndpoint = urlObj.protocol + '//' + urlObj.host;
 		out.zoneId = credentials.query['zone-http-header-value'];
 	} else if (key === 'predix-analytics-framework') {
 		console.log('trying to get serviceEndpoint and zoneId for analytics framework');
-		out.serviceEndpoint = credentials.query.uri;
-		out.zoneId = credentials.query['zone-http-header-value'];
+		console.log('credentials:', credentials);
+		if (credentials.query) {
+			out.serviceEndpoint = credentials.query.uri;
+			out.zoneId = credentials.query['zone-http-header-value'];
+		} else {
+			out.serviceEndpoint = credentials.catalog_uri;
+			out.zoneId = credentials['zone-http-header-value'];
+		}
 	}
 	if (!out.serviceEndpoint) {
 		console.log('no proxy set for service: ' + key);
