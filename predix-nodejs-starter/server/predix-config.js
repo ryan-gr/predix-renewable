@@ -25,6 +25,8 @@ if(node_env === 'development') {
 	settings.assetZoneId = devConfig.assetZoneId;
 	settings.timeseriesZoneId = devConfig.timeseriesZoneId;
 	settings.timeseriesURL = devConfig.timeseriesURL;
+	settings.analyticsZoneId = devConfig.analyticsZoneId;
+	settings.analyticsURL = devConfig.analyticsURL;
 
 } else {
 	// read VCAP_SERVICES
@@ -32,6 +34,7 @@ if(node_env === 'development') {
 	var uaaService = vcapsServices[process.env.uaa_service_label];
 	var assetService = vcapsServices['predix-asset'];
 	var timeseriesService = vcapsServices['predix-timeseries'];
+	var analyticsService = vcapsServices['predix-analytics-framework'];
 
 	if(uaaService) {
     settings.uaaURL = uaaService[0].credentials.uri;
@@ -44,6 +47,10 @@ if(node_env === 'development') {
 	if(timeseriesService) {
 		settings.timeseriesZoneId = timeseriesService[0].credentials.query['zone-http-header-value'];
 		settings.timeseriesURL = timeseriesService[0].credentials.query.uri;
+	}
+	if(analyticsService) {
+		settings.analyticsZoneId = analyticsService[0].credentials['zone-http-header-value'];
+		settings.analyticsURL = analyticsService[0].credentials.catalog_uri;
 	}
 
 	// read VCAP_APPLICATION
@@ -73,6 +80,16 @@ settings.buildVcapObjectFromLocalConfig = function(config) {
 				query: {
 					uri: config.timeseriesURL,
 					'zone-http-header-value': config.timeseriesZoneId
+				}
+			}
+		}];
+	}
+	if (config.analyticsURL) {
+		vcapObj['predix-analytics-framework'] = [{
+			credentials: {
+				query: {
+					uri: config.analyticsURL,
+					'zone-http-header-value': config.analyticsZoneId
 				}
 			}
 		}];
