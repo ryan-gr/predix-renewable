@@ -6,7 +6,9 @@ const loadData = () => {
   console.log('END');
 }
 
-document.querySelector('#wow').addEventListener('click', loadData);
+window.onload = () => {
+  loadData();
+}
 
 //const nowEpoch = () => (new Date()).getTime();
 
