@@ -124,7 +124,7 @@
       </div>
 
       <div class='content'>
-        <a>wow</a>
+        <a id='wow'>wow</a>
         <px-vis-timeseries
           debounce-resize-timing="250"
           width="900"
@@ -140,11 +140,8 @@
             {"y0":
               {"name":"y0","x":"timeStamp","y":"y0","yAxisUnit":"F","axis":{"id":"axis1","side":"left","number":"1"}},
             "y1":
-              {"name":"y1","x":"timeStamp","y":"y1","yAxisUnit":"Hz","axis":{"id":"axis2","side":"right","number":"1"}},
-            "y2":
-              {"name":"y2","x":"timeStamp","y":"y2","yAxisUnit":"C","axis":{"id":"axis3","side":"left","number":"2"}},
-            "y3":
-              {"name":"y3","x":"timeStamp","y":"y3","yAxisUnit":"F","axis":{"id":"axis4","side":"right","number":"2"}}}'
+              {"name":"y1","x":"timeStamp","y":"y1","yAxisUnit":"Hz","axis":{"id":"axis2","side":"right","number":"1"}}
+            }'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y0","type":"max","value":15.4784},{"for":"y0","type":"min","value":9.6531}]'
           display-threshold-title
@@ -157,4 +154,5 @@
     </div>
   </body>
   <script src="./scripts/test.js" charset="utf-8" type="application/javascript"></script>
+  <script src="./scripts/timeseries_actual.js" charset="utf-8" type="application/javascript"></script>
 </html>
