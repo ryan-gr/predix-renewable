@@ -113,7 +113,7 @@ if (config.isUaaConfigured()) {
   	failureRedirect: '/'
   }), function(req, res) {
   	console.log('Redirecting to secure route...');
-  	res.redirect('/secure');
+  	res.redirect('/test');
     });
 
   // example of calling a custom microservice.
