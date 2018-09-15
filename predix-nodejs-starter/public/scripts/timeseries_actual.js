@@ -10,7 +10,14 @@ window.onload = () => {
   loadData();
 }
 
-//const nowEpoch = () => (new Date()).getTime();
+window.onkeypress = (e) => {
+  //console.log(e.keyCode);
+  if (e.keyCode == 61) nextHour();
+  if (e.keyCode == 45) previousHour();
+  if (e.keyCode == 48) nextDay();
+  if (e.keyCode == 57) previousDay();
+}
+
 const startLoading = () => {
   document.querySelector('#loading').style.display = 'block';
   document.querySelector('#loading-div').style.display = 'block';
@@ -26,7 +33,31 @@ const endLoading = () => {
   }, 300);
 }
 
-const nowEpoch = () => 1534291200000;
+const updateCurrentTimeStamp = (epoch) => {
+  const d = new Date(epoch);
+  const ds = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  document.querySelector('#current-time-text').setAttribute('label', ds);
+  updatePredictedTimeStamp(epoch + 3600000 * 2);
+}
+
+const updatePredictedTimeStamp = (epoch) => {
+  const d = new Date(epoch);
+  const ds = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  document.querySelector('#predicted-time-text').setAttribute('label', ds);
+}
+
+let _nowEpoch = 1534291200000;
+const nextDay = () => modifyEpoch(86400000);
+const previousDay = () => modifyEpoch(-86400000);
+const nextHour = () => modifyEpoch(3600000);
+const previousHour = () => modifyEpoch(-3600000);
+const modifyEpoch = (del) => {
+  _nowEpoch += del;
+  console.log('new epoch', _nowEpoch, new Date(_nowEpoch));
+  getDataWithRange(beforeEpoch(), nowEpoch());
+}
+const nowEpoch = () => _nowEpoch;
+const resetNowEpoch = () => 1534291200000;
 const beforeEpoch = () => 1532995200000;
 
 const getDataWithRange = (epochStart, epochEnd) => {
@@ -62,7 +93,7 @@ const getDataWithRange = (epochStart, epochEnd) => {
       const analyticsData = {time: []};
       const graphData = [];
       let recordTime = true;
-      console.log(data);
+      console.log('data', data);
       for (const tag of data.tags) {
         const name = tag.name;
         const vals = tag.results[0].values;
@@ -73,8 +104,11 @@ const getDataWithRange = (epochStart, epochEnd) => {
           if (name == 'wind_speed_a') {
             graphData.push({
               'timeStamp': time,
-              'y0': measurement,
-              });
+              'y0': measurement/10,
+            });
+          }
+          if (name == 'moving_ave_a') {
+            graphData[i]['y1'] = measurement/10;
           }
           if (i == vals.length - 1 || i == vals.length - 2) {
             if (recordTime) analyticsData.time.push(time);
@@ -83,11 +117,19 @@ const getDataWithRange = (epochStart, epochEnd) => {
         }
         recordTime = false;
       }
-      console.log('analyticsData', JSON.stringify(analyticsData));
-      console.log('graphData', graphData);
+      //console.log('analyticsData', JSON.stringify(analyticsData));
+      //console.log('graphData', graphData);
 
+      const latestTime = analyticsData.time[analyticsData.time.length - 1];
+      const latestWindSpeed = analyticsData.wind_speed_a[analyticsData.wind_speed_a.length - 1] / 10;
+      const latestTemperature = analyticsData.temperature_a[analyticsData.temperature_a.length - 1] / 10;
+      console.log('latestTime', latestTime);
+      console.log('latestWindSpeed', latestWindSpeed);
+      console.log('latestTemperature', latestTemperature);
+      updateCurrentTimeStamp(latestTime);
+      document.querySelector('#wind-speed-text').setAttribute('value', latestWindSpeed);
+      document.querySelector('#temperature-text').setAttribute('value', latestTemperature);
       document.querySelector('px-vis-timeseries').setAttribute('chart-data', JSON.stringify(graphData));
-
       console.log('querying analytics');
       getPredictedValue(analyticsData);
 
