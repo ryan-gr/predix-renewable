@@ -45,15 +45,17 @@ const endLoading = () => {
 }
 
 const updateCurrentTimeStamp = (epoch) => {
+
   const d = new Date(epoch);
-  const ds = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  console.log('updating with', epoch, d);
+  const ds = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + ("0" + d.getUTCHours()).slice(-2) + ":" + ("0" + d.getUTCMinutes()).slice(-2);
   document.querySelector('#current-time-text').setAttribute('label', ds);
   updatePredictedTimeStamp(epoch + 3600000 * 2);
 }
 
 const updatePredictedTimeStamp = (epoch) => {
   const d = new Date(epoch);
-  const ds = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  const ds = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + ("0" + d.getUTCHours()).slice(-2) + ":" + ("0" + d.getUTCMinutes()).slice(-2);
   document.querySelector('#predicted-time-text').setAttribute('label', ds);
 }
 
@@ -69,7 +71,7 @@ const modifyEpoch = (del) => {
 }
 const nowEpoch = () => _nowEpoch;
 const resetNowEpoch = () => 1534291200000;
-const beforeEpoch = () => 1532995200000;
+const beforeEpoch = () => _nowEpoch - 86400000;
 
 const getDataWithRange = (epochStart, epochEnd) => {
   const myTimeSeriesBody = {
@@ -143,7 +145,7 @@ const getDataWithRange = (epochStart, epochEnd) => {
       document.querySelector('#temperature-text').setAttribute('value', latestTemperature);
       document.querySelector('px-vis-timeseries').setAttribute('chart-data', JSON.stringify(graphData));
       console.log('querying analytics');
-      getPredictedValue(analyticsData);
+      getPredictedValue(analyticsData, graphData);
 
 		}
 	};
@@ -155,7 +157,7 @@ const getDataWithRange = (epochStart, epochEnd) => {
   timeSeriesGetData.send(JSON.stringify(myTimeSeriesBody));
 }
 
-const getPredictedValue = (data) => {
+const getPredictedValue = (data, graphData) => {
 	const analyticsRequest = new XMLHttpRequest();
   //TODO: move the query to a local route to hide the zone-id?
 	analyticsRequest.open('POST', '/predix-api/predix-analytics-framework/api/v1/catalog/analytics/5a6391ad-6967-4dcd-bbd5-ca54bbcc89b0/execution', true);
@@ -173,6 +175,10 @@ const getPredictedValue = (data) => {
       console.log('predicted value', predictedValue);
       document.querySelector('#predicted-wind-speed-text').setAttribute('value', parseInt(predictedValue)/10);
       document.querySelector('#predicted-power-output-text').setAttribute('value', getPowerFromWindspeed(parseInt(predictedValue)/10));
+      const latestTime = graphData[graphData.length - 1].timeStamp;
+      graphData[graphData.length] = {timeStamp: latestTime + 3600000 * 2, y0:parseInt(predictedValue)/10};
+      console.log(graphData);
+      document.querySelector('px-vis-timeseries').setAttribute('chart-data', JSON.stringify(graphData));
       endLoading();
 		}
 	};
