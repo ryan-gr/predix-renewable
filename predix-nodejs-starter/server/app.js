@@ -23,17 +23,11 @@ if (node_env === 'development') {
 	proxy.setUaaConfig(devConfig);
 }
 
-//a back-end java microservice used in the Build A Basic App learningpath
-var windServiceURL = devConfig ? devConfig.windServiceURL : process.env.windServiceURL;
-
 console.log('************'+node_env+'******************');
 
 if (config.isUaaConfigured()) {
 	passport = passportConfig.configurePassportStrategy(config);
 }
-
-//turns on or off text or links depending on which tutorial you are in, guides you to the next tutorial
-var learningpaths = require('./learningpaths/learningpaths.js');
 
 /**********************************************************************
        SETTING UP EXRESS SERVER
@@ -82,12 +76,6 @@ SET UP MOCK API ROUTES
 	SET UP EXPRESS ROUTES
 *****************************************************************************/
 
-//route to retrieve learningpath info which drives what is displayed
-app.get('/learning-paths', function(req, res) {
-	//console.log(learningpaths);
-	res.json({"learningPathsConfig": learningpaths.getLearningPaths(config)});
-});
-
 app.use(express.static(path.join(__dirname, process.env['base-dir'] ? process.env['base-dir'] : '../public')));
 app.use(express.static(path.join(__dirname, '../bower_components')));
 
@@ -116,33 +104,6 @@ if (config.isUaaConfigured()) {
   	res.redirect('/dashboard');
     });
 
-  // example of calling a custom microservice.
-  if (windServiceURL && windServiceURL.indexOf('https') === 0) {
-    app.get('/api/services/windservices/*', passport.authenticate('main', { noredirect: true}),
-      // if calling a secure microservice, you can use this middleware to add a client token.
-      // proxy.addClientTokenMiddleware,
-      proxy.customProxyMiddleware('/api', windServiceURL)
-    );
-  }
-
-  /**
-  ** this endpoint is required by Timeseries.js, for winddata is switch
-  **/
-    app.get('/config-details', passport.authenticate('main', {
-      noredirect: true //Don't redirect a user to the authentication page, just show an error
-      }), function(req, res) {
-      console.log('Accessing the secure route data');
-      res.setHeader('Content-Type', 'application/json');
-      var configuration = {};
-      if(!windServiceURL) {
-        configuration.connectToTimeseries = "true";
-      }
-      configuration.isConnectedAssetEnabled = "false";
-      res.send(JSON.stringify(configuration));
-
-    });
-
-  //Or you can follow this pattern to create secure routes,
   // if only some portions of the app are secure.
   app.get('/secure', passport.authenticate('main', {
     noredirect: true //Don't redirect a user to the authentication page, just show an error
@@ -161,8 +122,6 @@ if (config.isUaaConfigured()) {
     res.sendFile(path.join(__dirname + '/../secure/dashboard.html'));
     //res.send('<h2>This is a sample secure route.</h2>');
   });
-
-
 
 }
 
