@@ -11,6 +11,20 @@ window.onload = () => {
 }
 
 //const nowEpoch = () => (new Date()).getTime();
+const startLoading = () => {
+  document.querySelector('#loading').style.display = 'block';
+  document.querySelector('#loading-div').style.display = 'block';
+  document.querySelector('#loading').style.opacity = 1;
+  document.querySelector('#loading-div').style.opacity = 1;
+}
+const endLoading = () => {
+  document.querySelector('#loading').style.opacity = 0;
+  document.querySelector('#loading-div').style.opacity = 0;
+  setTimeout(() => {
+    document.querySelector('#loading').style.display = 'none';
+    document.querySelector('#loading-div').style.display = 'none';
+  }, 300);
+}
 
 const nowEpoch = () => 1534291200000;
 const beforeEpoch = () => 1532995200000;
@@ -83,6 +97,7 @@ const getDataWithRange = (epochStart, epochEnd) => {
 		console.log('Error getting data for tags');
 	};
   //console.log('sending', JSON.stringify(myTimeSeriesBody));
+  startLoading();
   timeSeriesGetData.send(JSON.stringify(myTimeSeriesBody));
 }
 
@@ -95,7 +110,15 @@ const getPredictedValue = (data) => {
 		if (analyticsRequest.status >= 200 && analyticsRequest.status < 400) {
 			const data = JSON.parse(analyticsRequest.responseText);
 			//const str = JSON.stringify(timeSeriesGetData.responseText, null, 2);
-      console.log('received', data);
+      //console.log('received', data);
+      if (data.status != 'COMPLETED') {
+        console.log('Error in getting analytics!');
+        return;
+      }
+      const predictedValue = JSON.parse(data.result).Prediction;
+      console.log('predicted value', predictedValue);
+      document.querySelector('#predicted-wind-speed-text').setAttribute('value', parseInt(predictedValue)/10);
+      endLoading();
 		}
 	};
 	analyticsRequest.onerror = function() {
