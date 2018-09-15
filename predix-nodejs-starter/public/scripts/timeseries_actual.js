@@ -8,6 +8,32 @@ const loadData = () => {
 
 window.onload = () => {
   loadData();
+  document.querySelector('px-data-grid').addEventListener('item-action', (e) => {
+    console.log('selected action', e);
+    const action = e.detail.action;
+    const farmId = e.detail.item.farmId;
+    const turbineId = e.detail.item.turbineId;
+    if (action == 'dashboard') {
+      const nav = document.querySelector('px-app-nav');
+      nav.selectedRoute = ['home'];
+    }
+    if (action == 'mark') {
+      const data = document.querySelector('px-data-grid').tableData;
+      console.log(data);
+      for (const i in data) {
+        if (data[i].turbineId == turbineId) {
+          data[i].status = (data[i].status == 'Maintenance') ? 'Running' : 'Maintenance';
+          break;
+        }
+      }
+      document.querySelector('px-data-grid').updateColumns();
+    }
+
+  });
+  document.querySelector('px-app-nav').addEventListener('selected-changed', (e) => {
+    console.log('selected changed!', e.detail.value.id);
+    goto(e.detail.value.id);
+  });
 }
 
 window.onkeypress = (e) => {
@@ -16,6 +42,25 @@ window.onkeypress = (e) => {
   if (e.keyCode == 45) previousHour();
   if (e.keyCode == 48) nextDay();
   if (e.keyCode == 57) previousDay();
+}
+
+const goto = (id) => {
+  if (id == 'select') {
+    document.querySelector('.main-container').style.opacity = 0;
+    document.querySelector('.select-container').style.display = 'block';
+    setTimeout(() => {
+      document.querySelector('.main-container').style.display = 'none';
+      document.querySelector('.select-container').style.opacity = 1;
+    }, 300);
+  }
+  if (id == 'home') {
+    document.querySelector('.select-container').style.opacity = 0;
+    document.querySelector('.main-container').style.display = 'flex';
+    setTimeout(() => {
+      document.querySelector('.select-container').style.display = 'none';
+      document.querySelector('.main-container').style.opacity = 1;
+    }, 300);
+  }
 }
 
 const getPowerFromWindspeed = (ws) => {

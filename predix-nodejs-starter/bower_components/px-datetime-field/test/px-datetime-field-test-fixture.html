@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Component Test : Fixture for px-datetime-input</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <link rel="import" href="../px-datetime-field.html" />
+    <link rel="import" href="../../px-theme/px-theme-styles.html">
+    <script src="px-datetime-field-custom-tests.js"></script>
+  </head>
+
+  <body>
+    <custom-style>
+      <style include="px-theme-styles" is="custom-style"></style>
+    </custom-style>
+
+    <test-fixture id="px_datetime_field">
+      <template>
+        <px-datetime-field></px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field required">
+      <template>
+        <px-datetime-field
+          required>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field required buttons">
+      <template>
+        <px-datetime-field
+          required
+          show-buttons>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field buttons">
+      <template>
+        <px-datetime-field
+          show-buttons>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="px_datetime_field hideDate">
+      <template>
+        <px-datetime-field
+          hide-date>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field hideDate required">
+      <template>
+        <px-datetime-field
+          hide-date
+          required>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field hideDate required buttons">
+      <template>
+        <px-datetime-field
+          required
+          hide-date
+          show-buttons>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field hideDate buttons">
+      <template>
+        <px-datetime-field
+          hide-date
+          show-buttons>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="px_datetime_field hideTime">
+      <template>
+        <px-datetime-field
+          hide-time>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field hideTime required">
+      <template>
+        <px-datetime-field
+          hide-time
+          required>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field hideTime required buttons">
+      <template>
+        <px-datetime-field
+          required
+          hide-time
+          show-buttons>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+    <test-fixture id="px_datetime_field hideTime buttons">
+      <template>
+        <px-datetime-field
+          hide-time
+          show-buttons>
+        </px-datetime-field>
+      </template>
+    </test-fixture>
+
+  </body>
+</html>

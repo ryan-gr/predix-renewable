@@ -1,0 +1,61 @@
+{
+  "name": "px-datetime-field",
+  "version": "2.2.0",
+  "main": [
+    "px-datetime-field.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "node_modules",
+    "bower_components",
+    "sass",
+    "HISTORY.md",
+    "CONTRIBUTING.md",
+    "OSS_Notice.pdf",
+    "scripts",
+    ".github",
+    ".editorconfig",
+    ".jshintrc",
+    ".gitignore",
+    "LICENSE.md",
+    "gulpfile.js",
+    "monogram-wdmk.png",
+    "README.md",
+    "wct.conf.json",
+    "px-datetime-field.png"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "px-datetime-common": "^3.0.0",
+    "px-overlay": "^2.0.0"
+  },
+  "devDependencies": {
+    "px-demo": "^3.0.0",
+    "px-theme": "^3.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-flexbox-design": "^1.0.0",
+    "px-forms-design": "^2.0.0",
+    "px-spacing-design": "^1.0.0",
+    "web-component-tester": "^6.3.0",
+    "iron-test-helpers": "^2.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "license": "BSD-3-Clause"
+}

@@ -1,0 +1,369 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../app-localize-behavior/app-localize-behavior.html"/>
+
+<script>
+(function() {
+  var PxDatetimeBehavior = window.PxDatetimeBehavior = (window.PxDatetimeBehavior || {});
+
+  /**
+   * Collection of validation scripts for px-datetime components
+   * Dependencies: momentjs
+   *
+   * @polymerBehavior PxDatetimeBehavior.Validate
+   */
+  PxDatetimeBehavior.Validate = [Polymer.AppLocalizeBehavior, {
+    properties: {
+      /**
+       * Boolean stating if the current component is valid. Gets updated in '_validateInput'
+       *
+       * @private
+      */
+      isValid: {
+        type: Boolean,
+        value: true,
+        notify: true
+      },
+      /**
+       * String used to describe the current invalid state
+       */
+      validationErrorMessage: {
+        type: String,
+        value: 'invalid'
+      },
+      /**
+       * set a default for localizing
+       */
+      language: {
+        type: String,
+        value: 'en'
+      },
+      /**
+       * Use the key for localization if value for  language is missing. Should
+       * always be true for px components
+       */
+      useKeyIfMissing: {
+        type: Boolean,
+        value: true
+      },
+      /**
+       * used to pass in strings for localization
+       */
+      resources: {
+        type: Object,
+        value: function () {
+          return {
+            'en': {
+              'Future dates are not allowed': 'Future dates are not allowed',
+              'Past dates are not allowed': 'Past dates are not allowed',
+              'Year': 'Year',
+              'Month': 'Month',
+              'Day': 'Day',
+              'Hour': 'Hour',
+              'Minute': 'Minute',
+              'Second': 'Second',
+              'Millisecond': 'Millisecond',
+              'is not valid': 'is not valid',
+              'This hour is not within a 12 hour clock': 'This hour is not within a 12 hour clock'
+            }
+          };
+        }
+      }
+    },
+
+    observers: ['_updateValidationEvent(validationErrorMessage)'],
+
+    /**
+     * Validation function for 'px-datetime-entry'
+     *
+     * @event px-moment-valid
+     * @param {element} this
+
+     * @event px-moment-invalid
+     * @param {element} this
+     */
+    _validateInput: function (format, tz) {
+      var inputArr = Polymer.dom(this.root).querySelectorAll('.cell'),
+        inputStr = this._entryInputString(inputArr);
+      if (inputStr) {
+        var inputMoment = Px.moment.tz(inputStr, format, tz);
+        if (inputMoment.isValid()) {
+          this.set('isValid', true);
+          this.toggleClass('validation-error', false, this.$.wrapper);
+          this.fire('px-moment-valid', { "element": this });
+        }
+        else {
+          this.set('validationErrorMessage', this._determineValidationMessage(inputMoment, new Object()));
+          this.set('isValid', false);
+          this.toggleClass('validation-error', true, this.$.wrapper);
+          this.fire('px-moment-invalid', { "element": this });
+        }
+      }
+
+    },
+
+    /**
+     * Validate a complete field
+     * called in px-datetime-field and px-datetime-range-field
+     *
+     * @param {String} funcOrigin - The function that called validation. Used for `_handleIncompleteEntries`
+     * @return validation result:
+     * - MomentObj - The validated new moment obj
+     * - False - If the new moment is invalid
+     * - FieldSame - If the new moment is the same as the old moment
+     * - FieldBlank - If the visible field(s) are blank
+     */
+    _validateField: function (funcOrigin) {
+      var fieldNodes = new Object(),
+          dateEntry = Polymer.dom(this.root).querySelector('#date'),
+          timeEntry = Polymer.dom(this.root).querySelector('#time');
+
+      if (dateEntry !== null) { fieldNodes.dateCells = Polymer.dom(dateEntry.root).querySelectorAll('.cell') };
+      if (timeEntry !== null) { fieldNodes.timeCells = Polymer.dom(timeEntry.root).querySelectorAll('.cell') };
+      var dateString = (dateEntry !== null) ? this._entryInputString(fieldNodes.dateCells) : '',
+          timeString = (timeEntry !== null) ? this._entryInputString(fieldNodes.timeCells) : '';
+
+
+      // If the timeString is incomplete when only the time entry is showing or
+      // if the dateString is incomplete when only the date entry is showing or
+      // if either dateString or timeSting are incomplete when both entries are showing
+      // run `_handleIncompleteEntries()`
+      if ( (this.hideDate && !timeString) || (this.hideTime && !dateString) || ((!this.hideDate && !this.hideTime) && (!dateString || !timeString)) ) {
+        var entry = this.hideDate ? timeEntry : dateEntry;
+        return this._handleIncompleteEntries(funcOrigin, entry, fieldNodes);
+      }
+
+      //Create a string from all of the entries put together
+      var dateTimeString = dateString.trim() + " " + timeString.trim();
+      dateTimeString = dateTimeString.split('\xa0').join(' '); //added to be able to use Moment strict parsing
+
+      var dateFormat = this.hideDate ? '' : this.dateFormat,
+          timeFormat = this.hideTime ? '' : this.timeFormat,
+          dateTimeFormat = dateFormat + " " + timeFormat,
+          dateTimeMoment = Px.moment.tz(dateTimeString, dateTimeFormat, this.timeZone);
+
+      if(this.momentObj) {
+        //preserve parts of the momentObj that are not displayed
+        if (!/Y/.test(dateTimeFormat)) { dateTimeMoment.year(this.momentObj.year()); }
+        if (!/M/.test(dateTimeFormat)) { dateTimeMoment.month(this.momentObj.month()); }
+        if (!/D/.test(dateTimeFormat)) { dateTimeMoment.date(this.momentObj.date()); }
+        if (!/[Hhk]/.test(dateTimeFormat)) { dateTimeMoment.hour(this.momentObj.hour()); }
+        if (!/m/.test(dateTimeFormat)) { dateTimeMoment.minute(this.momentObj.minute()); }
+        if (!/s/.test(dateTimeFormat)) { dateTimeMoment.second(this.momentObj.second()); }
+        if (!/S/.test(dateTimeFormat)) { dateTimeMoment.millisecond(this.momentObj.millisecond()); }
+      }
+
+      return this._validateMomentObj(dateTimeMoment);
+    },
+    /**
+     * Validate a moment object
+     * called in from _validateField and px-datetime-field
+     *
+     * @param {Object} momentObj - Moment object getting validated
+     * @return validation result:
+     * - MomentObj - The validated new moment obj
+     * - False - If the new moment is invalid
+     * - FieldSame - If the new moment is the same as the old moment
+     */
+    _validateMomentObj: function (validatingMomentObj) {
+      //If null is passed in clear the validation errors
+      if (validatingMomentObj === null ) {
+        this._validField(validatingMomentObj);
+        return;
+      }
+
+      var invalidObj = new Object();
+      invalidObj.futureSelection = this.blockFutureDates && validatingMomentObj.isAfter(Px.moment.tz(Px.moment(), this.timeZone));
+      invalidObj.pastSelection   = this.blockPastDates && validatingMomentObj.isBefore(Px.moment.tz(Px.moment(), this.timeZone));
+      invalidObj.pastMaxSelection   = this.maxDate && validatingMomentObj.isAfter(this.maxDate);
+      invalidObj.beforeMinSelection = this.minDate && validatingMomentObj.isBefore(this.minDate);
+
+      if ((validatingMomentObj.isValid() && !invalidObj.futureSelection && !invalidObj.pastSelection && !invalidObj.pastMaxSelection && !invalidObj.beforeMinSelection)) {
+        this._validField(validatingMomentObj);
+
+        //if the momentObj is null or not that same as this.momentObj return validatingMomentObj
+        if (!this.momentObj || !this.momentObj.isSame(validatingMomentObj)) {
+          return validatingMomentObj;
+        }
+        else if (this.momentObj.isSame(validatingMomentObj)) {
+          return 'FieldSame';
+        }
+
+      }
+      else {
+        this._invalidField(validatingMomentObj, invalidObj);
+        return false;
+      }
+    },
+    /**
+     * Reset field to valid
+     *
+     * @param {Object} submittedMoment - valid momentObj
+     */
+    _validField: function (submittedMoment) {
+      if (!this.hideDate) {
+        var dateEntry = Polymer.dom(this.root).querySelector('#date');
+        if(dateEntry !== null){dateEntry.toggleClass('validation-error', false, dateEntry.$.wrapper);}
+      }
+      if (!this.hideTime) {
+        var timeEntry = Polymer.dom(this.root).querySelector('#time');
+        if(timeEntry !== null){timeEntry.toggleClass('validation-error', false, timeEntry.$.wrapper);}
+      }
+      this.set('fieldIsValid', true);
+      this.fire('px-moment-valid', { "element": this });
+    },
+    /**
+     * Set field to invalid
+     * Set validation Error Message, turn on validation error, set isValid to false, and fire event.
+     *
+     * @param {Object} submittedMoment - Invalid momentObj
+     * @param {Object} invalidObj - Stores the different invalid
+     */
+    _invalidField: function (submittedMoment, invalidObj) {
+      this.set('validationErrorMessage', this._determineValidationMessage(submittedMoment, invalidObj));
+      this.set('fieldIsValid', false);
+      this.toggleClass('validation-error', true, this.$.fieldWrapper);
+      this.fire('px-moment-invalid', { "element": this });
+    },
+    /**
+     * loop through array of the entry cells and return a string of the value
+     *
+     * @param {Object} cells - Date or time cell nodes
+     */
+    _entryInputString: function (cells) {
+      var outputStr = ""
+      for (var i = 0; i < cells.length; i++) {
+        var value = Polymer.dom(cells[i].root).querySelector('.datetime-entry-input').value;
+        if (value === '') {
+          return '';
+        }
+        if (cells[i].momentFormat !== "Z") {
+          outputStr = outputStr + value + cells[i].symbol;
+        }
+      }
+      return outputStr;
+    },
+    /**
+     * Returns a meaningful validation message
+     *
+     * @param {Object} submittedMoment - Invalid momentObj
+     * @param {Object} invalidObj - Stores the different invalid
+     */
+    _determineValidationMessage: function (submittedMoment, invalidObj) {
+      if (!submittedMoment) { return this.localize('Incomplete'); }
+      if (invalidObj.futureSelection) { return this.localize('Future dates are not allowed'); }
+      else if (invalidObj.pastSelection) { return this.localize('Past dates are not allowed'); }
+      else if (invalidObj.pastMaxSelection) { return this.localize('Date is past max date'); }
+      else if (invalidObj.beforeMinSelection) { return this.localize('Date is before min date'); }
+      else {
+        var invalidAt = submittedMoment.invalidAt();
+
+        if (invalidAt !== -1) {
+          switch (invalidAt) {
+            case 0:
+              return this.localize('Year') + ' ' + submittedMoment._a[invalidAt] + ' ' + this.localize('is not valid');
+              break;
+            case 1:
+              return this.localize('Month') + ' ' + (submittedMoment._a[invalidAt] + 1) + ' ' + this.localize('is not valid');
+              break;
+            case 2:
+              return this.localize('Day') + ' ' + submittedMoment._a[invalidAt] + ' ' + this.localize('is not valid');
+              break;
+            case 3:
+              return this.localize('Hour') + ' ' + submittedMoment._a[invalidAt] + ' ' + this.localize('is not valid');
+              break;
+            case 4:
+              return this.localize('Minute') + ' ' + submittedMoment._a[invalidAt] + ' ' + this.localize('is not valid');
+              break;
+            case 5:
+              return this.localize('Second') + ' ' + submittedMoment._a[invalidAt] + ' ' + this.localize('is not valid');
+              break;
+            case 6:
+              return this.localize('Millisecond') + ' ' + submittedMoment._a[invalidAt] + ' ' + this.localize('is not valid');
+              break;
+          }
+        } else if (submittedMoment.parsingFlags().bigHour === true) {
+          return this.localize('This hour is not within a 12 hour clock');
+        }
+      }
+    },
+    /**
+     * Fires when 'validationErrorMessage' is changed
+     *
+     * @event px-validation-message
+     * @param {string} validationErrorMessage - Values validationErrorMessage
+     */
+    _updateValidationEvent: function (validationErrorMessage) {
+      if (validationErrorMessage !== undefined) {
+        this.fire('px-validation-message', { 'validationErrorMessage': this.validationErrorMessage })
+      }
+    },
+    /**
+     * Sets the button state based on if validation has been passed or not. This in turn enables or disables the Submit button.
+     *
+     * @param {Boolean} state - Where the validation has passed or failed
+     */
+    _submitButtonState: function (state) {
+      this.set('isSubmitButtonValid', state);
+    },
+    /**
+     * If required any incomplete momentObj is invalid
+     * If not required determine if the field is blank
+     *
+     * @param {String} funcOrigin - The function that called validation
+     * @param {Element} entry - px-datetime-entry date
+     * @param {Object} fieldNodes - Object of date and time cell nodes
+     */
+    _handleIncompleteEntries: function (funcOrigin, entry, fieldNodes) {
+      if (funcOrigin === "_momentChanged") { return false };
+      if (!this.required) {
+        var dateEntryBlank = this.hideDate ? true : this._loopOverCellValues(fieldNodes.dateCells),
+          timeEntryBlank = this.hideTime ? true : this._loopOverCellValues(fieldNodes.timeCells);
+        if (dateEntryBlank && timeEntryBlank) {
+          entry.toggleClass('validation-error', false, entry.$.fieldWrapper);
+          entry.set('isValid', true);
+          return "FieldBlank";
+        }
+        this._invalidField("", new Object());
+      }
+      else {
+        this._invalidField("", new Object());
+        return false;
+      }
+    },
+    /**
+     * Checking to see if all cells are empty
+     * If a cell has a value return false
+     *
+     * @param {Object} cells - Date or time cell nodes
+     */
+    _loopOverCellValues: function (cells) {
+      var isBlank = true;
+      if (cells && cells.length) {
+        for (i = 0; i < cells.length; i++) {
+          var cellInput = Polymer.dom(cells[i].root).querySelectorAll('.datetime-entry-input');
+          if (cellInput[0].value !== "") {
+            isBlank = false;
+            break;
+          }
+        };
+      }
+      return isBlank;
+    }
+  }];
+})();
+</script>

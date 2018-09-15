@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Predix UI</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../polymer/polymer.html" />
+  <link rel="import" href="../../px-theme/px-theme-styles.html">
+  <link rel="import" href="../px-datetime-range-field.html" />
+  <style>
+    .demo{
+      margin-top: 40px;
+    }
+  </style>
+  <custom-style>
+    <style include="px-theme-styles" is="custom-style"></style>
+  </custom-style>
+</head>
+<body>
+  <dom-bind>
+    <template is="dom-bind">
+      <px-datetime-range-field
+        class="demo"
+        block-future-dates
+        date-format="YY/MM/DD"
+        time-format="hh:mm a"
+        show-time-zone="text"
+        from-moment="{{fromMoment}}"
+        to-moment="{{toMoment}}"
+        allow-wrap
+        required>
+      </px-datetime-range-field>
+    </template>
+  </dom-bind>
+  <script>
+    var template = document.querySelector('template[is=dom-bind]');
+    template.fromMoment = Px.moment().startOf('day').subtract(5, 'days');
+    template.toMoment = Px.moment().startOf('day').subtract(1, 'days');
+
+    // Support hybrid mode
+    var templatev1 = document.querySelector('dom-bind');
+    templatev1.fromMoment = template.fromMoment;
+    templatev1.toMoment = template.toMoment;
+  </script>
+</body>
+</html>
+

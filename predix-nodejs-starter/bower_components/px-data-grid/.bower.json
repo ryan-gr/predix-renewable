@@ -1,0 +1,69 @@
+{
+  "name": "px-data-grid",
+  "version": "1.0.7",
+  "homepage": "https://github.com/predixdesignsystem/px-data-grid",
+  "main": "px-data-grid.html",
+  "description": "Polymer 2 element that displays tabular data",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^2.4.0",
+    "app-localize-behavior": "^2.0.0",
+    "iron-a11y-keys-behavior": "^2.0.0",
+    "iron-a11y-announcer": "^2.0.0",
+    "iron-scroll-target-behavior": "^2.0.0",
+    "px-icon-set": "^2.0.0",
+    "px-dropdown": "^4.4.0",
+    "vaadin-grid": "^4.1.0",
+    "vaadin-radio-button": "1.0.0-alpha8",
+    "px-spinner": "^2.2.0",
+    "px-tooltip": "^1.2.3",
+    "px-datetime-picker": "^2.0.2",
+    "px-modal": "^3.2.2",
+    "px-buttons-design": "^2.0.6",
+    "px-chip": "^1.1.0",
+    "px-actionable-design": "^2.0.5",
+    "px-popover": "^2.1.2",
+    "px-slider": "^2.1.1",
+    "px-rangepicker": "^3.2.0",
+    "px-moment-imports": "^1.0.0",
+    "px-number-formatter": "^4.2.0"
+  },
+  "devDependencies": {
+    "px-theme": "^3.1.4",
+    "px-dark-theme": "^2.1.0",
+    "px-dark-demo-theme": "^2.1.0",
+    "px-button-group-design": "^2.0.0",
+    "px-demo": "^3.0.0",
+    "px-demo-snippet": "vaadin/px-demo-snippet#master",
+    "px-forms-design": "^2.0.0",
+    "px-layout-design": "^1.0.0",
+    "px-starter-kit-design": "^1.0.0",
+    "px-tables-design": "^2.0.0",
+    "web-component-tester": "^6.0.0",
+    "px-colors-design": "^1.0.5",
+    "px-defaults-design": "^2.0.2",
+    "px-mixins-design": "^1.0.1",
+    "px-typography-design": "^2.0.3"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0",
+    "px-demo-snippet": "master"
+  },
+  "license": "Apache-2.0",
+  "_release": "1.0.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.7",
+    "commit": "11f6864392426a5e5fd5e09fb13cf7d6aeb11ef5"
+  },
+  "_source": "https://github.com/predixdesignsystem/px-data-grid.git",
+  "_target": "^1.0.7",
+  "_originalSource": "px-data-grid",
+  "_direct": true
+}

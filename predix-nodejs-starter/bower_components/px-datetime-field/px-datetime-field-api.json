@@ -1,0 +1,1325 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "The datetime components rely on [Moment.js](https://momentjs.com/) and [Moment Timezone](https://momentjs.com/timezone/).\n\n### Usage\n\n    <px-datetime-field></px-datetime-field>\n\n\n### Styling\nThe following custom property is available for styling. Please also refer to px-forms-design for additional variables that can be used to customize the field's appearance.\n\nCustom property | Description\n:----------------|:-------------\n`--px-datetime-field-background-color` | Background color for field and validation\n`--px-datetime-field-height`  | Sets the height of the input field\n`px-input` css variables | Impacts the input text, border, and background colors\n`px-validation-error` css variables | Impacts validation error text and background color",
+      "summary": "",
+      "path": "px-datetime-field.html",
+      "properties": [
+        {
+          "name": "momentObj",
+          "type": "Object",
+          "description": "Moment value with the date or time to display.  Will be parsed according to the moment format. (See momentFormat property.)\nDefaults to now.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 20,
+              "column": 4
+            },
+            "end": {
+              "line": 26,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "null",
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "_tempMomentObj",
+          "type": "Object",
+          "description": "temporary moment object used for validation and display. This\nobject should be used by subcomponents when we want to \"try\"\na value and see the result of validation AND/OR give us the\nability to rollback (cancel) or apply",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 69,
+              "column": 4
+            },
+            "end": {
+              "line": 72,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "description": "Moment format string for the DATE format to display/validate this field against\nYear, month, day and offset tokens (Do not support Y, Q, MMM, MMMM, or Do)\n(see http://momentjs.com/docs/#/parsing/string-format/)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 111,
+              "column": 6
+            },
+            "end": {
+              "line": 114,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"YYYY-MM-DD\""
+        },
+        {
+          "name": "timeFormat",
+          "type": "string",
+          "description": "Moment format string for the TIME format to display/validate this field against.\nHour, minute, second, millisecond, and offset tokens\n(see http://momentjs.com/docs/#/parsing/string-format/)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 121,
+              "column": 6
+            },
+            "end": {
+              "line": 124,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"HH:mm:ss\""
+        },
+        {
+          "name": "showTimeZone",
+          "type": "string",
+          "description": "The format of displaying the time zone:\n - `dropdown`: shows the time zone as a dropdown which the user can use to select a different time zone. Only contains a subset of all time zones\n - `extendedDropdown`: shows the time zone as a dropdown which the user can use to select a different time zone. Contains all existing time zones (588)\n - `text`: shows the time zone as text, non editable\n - `abbreviatedText`: shows the time zone as an abbreviated text, non editable (such as PST, EST...)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 133,
+              "column": 6
+            },
+            "end": {
+              "line": 136,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "hideTime",
+          "type": "boolean",
+          "description": "Controls whether time is displayed in this field",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 140,
+              "column": 6
+            },
+            "end": {
+              "line": 143,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "hideDate",
+          "type": "boolean",
+          "description": "Controls whether date should be hidden in this field. Typically used\nin combination with hideTime to make the field showing only the time",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 148,
+              "column": 6
+            },
+            "end": {
+              "line": 151,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "hideIcon",
+          "type": "boolean",
+          "description": "Controls whether the calendar/clock icon should be hidden",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 155,
+              "column": 6
+            },
+            "end": {
+              "line": 158,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "allowWrap",
+          "type": "boolean",
+          "description": "Controls whether the buttons will wrap under the field if the horizontal\nspace is too small.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 163,
+              "column": 6
+            },
+            "end": {
+              "line": 166,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "If true, validation will error if the field is empty.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 170,
+              "column": 6
+            },
+            "end": {
+              "line": 173,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "dateIsValid",
+          "type": "boolean",
+          "description": "Reflects if the date shown is valid.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 178,
+              "column": 6
+            },
+            "end": {
+              "line": 181,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "timeIsValid",
+          "type": "boolean",
+          "description": "Reflects if the time shown is valid.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 186,
+              "column": 6
+            },
+            "end": {
+              "line": 189,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "fieldIsValid",
+          "type": "boolean",
+          "description": "Relects if the full input valid is valid.\nSet in _validationField()",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 195,
+              "column": 6
+            },
+            "end": {
+              "line": 198,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "isValid",
+          "type": "boolean",
+          "description": "If showing only the date, whether the date is valid,\nif showing only the time, whether the time is valid,\nif showing both, whether both are valid.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 204,
+              "column": 6
+            },
+            "end": {
+              "line": 207,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "hideValidationMessage",
+          "type": "boolean",
+          "description": "Determines whether to display the validation message or not.\nUse mostly by datetime-range-field.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 212,
+              "column": 6
+            },
+            "end": {
+              "line": 215,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_validationErrorMessage",
+          "type": "string",
+          "description": "Used to display the error message when an entry in not valid",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 219,
+              "column": 6
+            },
+            "end": {
+              "line": 222,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "_forcedFailedClass",
+          "type": "boolean",
+          "description": "Used to determine if the 'validation-failed' class needs to be applied to '_getWrapperClass'\nThis attribute is set by px-datetime-range-field",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 228,
+              "column": 7
+            },
+            "end": {
+              "line": 231,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "isSelected",
+          "type": "boolean",
+          "description": "True if any cell is currently selected.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 236,
+              "column": 6
+            },
+            "end": {
+              "line": 240,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "preventApply",
+          "type": "boolean",
+          "description": "Used to prevent this element's apply from changing the moment objects.\nUsed by `px-datetime-range-field`.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 245,
+              "column": 6
+            },
+            "end": {
+              "line": 248,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_dropdownActive",
+          "type": "boolean",
+          "description": "Toggles the `dt-dropdown-is-active` class",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 252,
+              "column": 6
+            },
+            "end": {
+              "line": 255,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_dropdownHoverFix",
+          "type": "boolean",
+          "description": "Toggles the `.dt-text-field--hover-fix` class",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 259,
+              "column": 6
+            },
+            "end": {
+              "line": 262,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "keyBindings",
+          "type": "Object",
+          "description": "Key bindings for iron-a11y-keys-behavior",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 291,
+              "column": 4
+            },
+            "end": {
+              "line": 294,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_localeChanged",
+          "description": "Make sure the moment obj pick up the possibly new moment locale",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 35,
+              "column": 2
+            },
+            "end": {
+              "line": 39,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "_timeZoneChanged",
+          "description": "Makes sure the moment object reflects the right timezone.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 43,
+              "column": 2
+            },
+            "end": {
+              "line": 48,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "_applyTempMoment",
+          "description": "Applies value of temp moment to public momentObj",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 84,
+              "column": 2
+            },
+            "end": {
+              "line": 88,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "_rollbackTempMoment",
+          "description": "Rollback value of temp moment to use public momentObj",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 92,
+              "column": 3
+            },
+            "end": {
+              "line": 94,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "_localeChangedTemp",
+          "description": "Make sure the moment obj pick up the possibly new moment locale",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 98,
+              "column": 3
+            },
+            "end": {
+              "line": 102,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "_timeZoneChangedTemp",
+          "description": "Makes sure the moment object reflects the right timezone.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 106,
+              "column": 3
+            },
+            "end": {
+              "line": 111,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "_showTimeZoneInDate",
+          "description": "Will only show the dropdown in the date entry if `hideTime`\nand `showTimeZone` are true",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 281,
+              "column": 4
+            },
+            "end": {
+              "line": 287,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "hideTime"
+            },
+            {
+              "name": "showTimeZone"
+            }
+          ]
+        },
+        {
+          "name": "_nextFieldRequired",
+          "description": "Jumps from the date field to time field when using arrow keys",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 298,
+              "column": 4
+            },
+            "end": {
+              "line": 309,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        },
+        {
+          "name": "_previousFieldRequired",
+          "description": "Jumps from the time field to date field when using arrow keys",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 313,
+              "column": 4
+            },
+            "end": {
+              "line": 324,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        },
+        {
+          "name": "_focusFirstEntry",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 327,
+              "column": 4
+            },
+            "end": {
+              "line": 333,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "forceTimeFocus"
+            }
+          ]
+        },
+        {
+          "name": "_focusLastEntry",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 336,
+              "column": 4
+            },
+            "end": {
+              "line": 342,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_getWrapClass",
+          "description": "Toggles classes causing the buttons to wrap under the field",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 346,
+              "column": 4
+            },
+            "end": {
+              "line": 350,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "allowWrap"
+            }
+          ]
+        },
+        {
+          "name": "_getButtonMarginClass",
+          "description": "Adds a margin right if the button are showing",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 354,
+              "column": 4
+            },
+            "end": {
+              "line": 364,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "showButtons"
+            },
+            {
+              "name": "allowWrap"
+            }
+          ]
+        },
+        {
+          "name": "_handleDropdownFocus",
+          "description": "event that watches when the dropdown has focus",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 368,
+              "column": 4
+            },
+            "end": {
+              "line": 371,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_handleDropdownBlur",
+          "description": "event that watches when the dropdown loses focus",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 375,
+              "column": 4
+            },
+            "end": {
+              "line": 379,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "detached",
+          "description": "when dt-field is detached set `_dropdownFocused` to false.\nprevents the dropdown from being stuck in a focused state",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 384,
+              "column": 4
+            },
+            "end": {
+              "line": 386,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_handleHoverFix",
+          "description": "This is a quick fix.\nIn order to make dt-field look like an input field we have to overwrite some css on #fieldWrapper.\n\nThere is a hover state on #fieldWrapper and px-dropdown is a child of #fieldWrapper;\ntherefore, when dropdown is opened the hover to #fieldWrapper is extended.\nThis causes a flash of gray when the user selects a time zone with the mouse.\nIn order to prevent this flash we need to overwrite the hover state by added\n`.dt-text-field--hover-fix` to #fieldWrapper.\n\nThe true issue is that we can't listen to px-dropdown.opened because there is a timing issue\nwhen px-dropdown.opened is set to false vs when the dropdown is not longer visible. This causes the flash.\nWe couldn't find any other events that don't have a timing issue.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 401,
+              "column": 4
+            },
+            "end": {
+              "line": 406,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_getWrapperClass",
+          "description": "isValid & _forcedFailedClass - determines whether to show the validation error classes\nisSelected - sets the styles when an entryCell is selected\n_dropdownActive - overwrites the styles when the dropdown is focused\n_dropdownHoverFix - overwrites the styles when the user selects an item in the dropdown",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 413,
+              "column": 4
+            },
+            "end": {
+              "line": 426,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "isValid"
+            },
+            {
+              "name": "_forcedFailedClass"
+            },
+            {
+              "name": "isSelected"
+            },
+            {
+              "name": "_dropdownActive"
+            },
+            {
+              "name": "_dropdownHoverFix"
+            }
+          ]
+        },
+        {
+          "name": "_getEntryDateClass",
+          "description": "Adds a right margin if both entries are showing",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 430,
+              "column": 4
+            },
+            "end": {
+              "line": 439,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "hideDate"
+            },
+            {
+              "name": "hideTime"
+            },
+            {
+              "name": "hideIcon"
+            }
+          ]
+        },
+        {
+          "name": "_getIsValid",
+          "description": "computes `isValid`",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 443,
+              "column": 4
+            },
+            "end": {
+              "line": 445,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "fieldIsValid"
+            },
+            {
+              "name": "dateIsValid"
+            },
+            {
+              "name": "timeIsValid"
+            }
+          ]
+        },
+        {
+          "name": "_handleValidationMessage",
+          "description": "Listener for the validation message to change and reflect the changes to _validationErrorMessage",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 449,
+              "column": 4
+            },
+            "end": {
+              "line": 451,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_showValidation",
+          "description": "Range validation error has precedence over the field validation error\nIf the range is invalid then display nothing here",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 456,
+              "column": 4
+            },
+            "end": {
+              "line": 460,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "isValid"
+            },
+            {
+              "name": "hideValidationMessage"
+            }
+          ]
+        },
+        {
+          "name": "_handleValidMoment",
+          "description": "Observer on the momentObj. If valid and buttons are hidden apply changes\nwill not run from `px-datetime-range-submitted`",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 465,
+              "column": 4
+            },
+            "end": {
+              "line": 481,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        },
+        {
+          "name": "_handleInvalidMoment",
+          "description": "Listener for the cell validation failure event.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 485,
+              "column": 4
+            },
+            "end": {
+              "line": 493,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        },
+        {
+          "name": "_iconClicked",
+          "description": "Focuses select to the next cell when an icon is clicked",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 497,
+              "column": 4
+            },
+            "end": {
+              "line": 504,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        },
+        {
+          "name": "_dateTimeButtons",
+          "description": "Listens for a button click and will apply or cancel\nbased on the event\nwill not run from `px-datetime-range-submitted`",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 510,
+              "column": 4
+            },
+            "end": {
+              "line": 517,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        },
+        {
+          "name": "_onEsc",
+          "description": "When buttons are showing, it will clear changes\nwill not run from `px-datetime-range-submitted`",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 522,
+              "column": 4
+            },
+            "end": {
+              "line": 524,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_onEnter",
+          "description": "When buttons are showing, it will apply changes\nwill not run from `px-datetime-range-submitted`",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 529,
+              "column": 4
+            },
+            "end": {
+              "line": 532,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        },
+        {
+          "name": "_applyChanges",
+          "description": "Validate field\nIf valid set the momentObj",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 537,
+              "column": 5
+            },
+            "end": {
+              "line": 552,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "origin"
+            }
+          ]
+        },
+        {
+          "name": "_cancelChanges",
+          "description": "Clear field or reset to previous moment objs",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 556,
+              "column": 4
+            },
+            "end": {
+              "line": 566,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 95,
+          "column": 10
+        },
+        "end": {
+          "line": 567,
+          "column": 3
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "moment-obj",
+          "description": "Moment value with the date or time to display.  Will be parsed according to the moment format. (See momentFormat property.)\nDefaults to now.",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-behavior.html",
+            "start": {
+              "line": 20,
+              "column": 4
+            },
+            "end": {
+              "line": 26,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "Object",
+          "inheritedFrom": "pxDatetimeBehavior"
+        },
+        {
+          "name": "date-format",
+          "description": "Moment format string for the DATE format to display/validate this field against\nYear, month, day and offset tokens (Do not support Y, Q, MMM, MMMM, or Do)\n(see http://momentjs.com/docs/#/parsing/string-format/)",
+          "sourceRange": {
+            "start": {
+              "line": 111,
+              "column": 6
+            },
+            "end": {
+              "line": 114,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "time-format",
+          "description": "Moment format string for the TIME format to display/validate this field against.\nHour, minute, second, millisecond, and offset tokens\n(see http://momentjs.com/docs/#/parsing/string-format/)",
+          "sourceRange": {
+            "start": {
+              "line": 121,
+              "column": 6
+            },
+            "end": {
+              "line": 124,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "show-time-zone",
+          "description": "The format of displaying the time zone:\n - `dropdown`: shows the time zone as a dropdown which the user can use to select a different time zone. Only contains a subset of all time zones\n - `extendedDropdown`: shows the time zone as a dropdown which the user can use to select a different time zone. Contains all existing time zones (588)\n - `text`: shows the time zone as text, non editable\n - `abbreviatedText`: shows the time zone as an abbreviated text, non editable (such as PST, EST...)",
+          "sourceRange": {
+            "start": {
+              "line": 133,
+              "column": 6
+            },
+            "end": {
+              "line": 136,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "hide-time",
+          "description": "Controls whether time is displayed in this field",
+          "sourceRange": {
+            "start": {
+              "line": 140,
+              "column": 6
+            },
+            "end": {
+              "line": 143,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "hide-date",
+          "description": "Controls whether date should be hidden in this field. Typically used\nin combination with hideTime to make the field showing only the time",
+          "sourceRange": {
+            "start": {
+              "line": 148,
+              "column": 6
+            },
+            "end": {
+              "line": 151,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "hide-icon",
+          "description": "Controls whether the calendar/clock icon should be hidden",
+          "sourceRange": {
+            "start": {
+              "line": 155,
+              "column": 6
+            },
+            "end": {
+              "line": 158,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "allow-wrap",
+          "description": "Controls whether the buttons will wrap under the field if the horizontal\nspace is too small.",
+          "sourceRange": {
+            "start": {
+              "line": 163,
+              "column": 6
+            },
+            "end": {
+              "line": 166,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "required",
+          "description": "If true, validation will error if the field is empty.",
+          "sourceRange": {
+            "start": {
+              "line": 170,
+              "column": 6
+            },
+            "end": {
+              "line": 173,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "is-valid",
+          "description": "If showing only the date, whether the date is valid,\nif showing only the time, whether the time is valid,\nif showing both, whether both are valid.",
+          "sourceRange": {
+            "start": {
+              "line": 204,
+              "column": 6
+            },
+            "end": {
+              "line": 207,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "hide-validation-message",
+          "description": "Determines whether to display the validation message or not.\nUse mostly by datetime-range-field.",
+          "sourceRange": {
+            "start": {
+              "line": 212,
+              "column": 6
+            },
+            "end": {
+              "line": 215,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "prevent-apply",
+          "description": "Used to prevent this element's apply from changing the moment objects.\nUsed by `px-datetime-range-field`.",
+          "sourceRange": {
+            "start": {
+              "line": 245,
+              "column": 6
+            },
+            "end": {
+              "line": 248,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "moment-obj-changed",
+          "description": "Fired when the `momentObj` property changes.",
+          "metadata": {},
+          "inheritedFrom": "pxDatetimeBehavior"
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "px-datetime-field"
+    }
+  ]
+}

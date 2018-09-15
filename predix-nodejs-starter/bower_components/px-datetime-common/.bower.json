@@ -1,0 +1,73 @@
+{
+  "name": "px-datetime-common",
+  "version": "3.2.1",
+  "main": [
+    "px-datetime-common.html"
+  ],
+  "ignore": [
+    "*.enc",
+    "**/.*",
+    "scripts",
+    "*.md",
+    "*.png",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    ".github",
+    "bower_components",
+    "node_modules",
+    "test"
+  ],
+  "dependencies": {
+    "px-moment-imports": "^1.0.0",
+    "polymer": "#1.9 - 2",
+    "iron-a11y-keys-behavior": "^2.0.0",
+    "px-icon-set": "^2.0.0",
+    "app-localize-behavior": "^2.0.0",
+    "px-dropdown": "^4.0.0",
+    "px-overlay": "^2.0.0"
+  },
+  "devDependencies": {
+    "px-theme": "^3.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-flexbox-design": "^1.0.0",
+    "px-helpers-design": "^1.0.0",
+    "px-buttons-design": "^2.0.0",
+    "px-forms-design": "^2.0.0",
+    "px-list-bare-design": "^1.0.0",
+    "px-actionable-design": "^2.0.0",
+    "px-spacing-design": "^1.0.0",
+    "px-headings-design": "^1.0.0",
+    "px-demo": "^3.0.0",
+    "web-component-tester": "^6.4.0",
+    "iron-test-helpers": "^2.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/predixdesignsystem/px-datetime-common",
+  "_release": "3.2.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.2.1",
+    "commit": "9596703df5ae732eb198b97113e885b8a07ae0a1"
+  },
+  "_source": "https://github.com/predixdesignsystem/px-datetime-common.git",
+  "_target": "^3.0.0",
+  "_originalSource": "px-datetime-common"
+}

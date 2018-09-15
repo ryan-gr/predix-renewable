@@ -1,0 +1,116 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../../polymer/polymer.html"/>
+<link rel="import" href="../px-chip.html"/>
+<link rel="import" href="../../px-typeahead/px-typeahead.html"/>
+
+<dom-module id="filter-typeahead-element">
+<template>
+  <style>
+    .chips {
+      display: flex;
+    }
+    .chips > *+* {
+      padding-left: 5px;
+    }
+    .typeahead {
+      width: 250px;
+      margin-bottom: 15px;
+    }
+  </style>
+  <h1>Food</h1>
+  <div class="typeahead">
+    <px-typeahead
+      placeholder="Find food"
+      local-candidates="[[allFilters]]"
+      on-px-typeahead-item-selected="_handleSearchSelected">
+    </px-typeahead>
+  </div>
+
+  <div id="chips" class="chips">
+    <template is="dom-repeat" items="[[selectedFilters]]">
+      <px-chip content="{{item}}" show-icon not-selectable></px-chip>
+    </template>
+  </div>
+
+  <div>
+    <template is="dom-repeat" items="[[food]]" filter="{{_getFoodFilter(selectedFilters, selectedFilters.*)}}">
+      <p>{{item.name}}</p>
+    </template>
+  </div>
+</template>
+<script>
+  Polymer({
+    is: 'filter-typeahead-element',
+    properties: {
+      food: {
+        type: Array,
+        value: function() {
+          return [{name: 'bacon', tags: ['gluten free']},
+                  {name: 'salmon', tags: ['gluten free','kosher']},
+                  {name: 'pizza', tags: ['kosher']},
+                  {name: 'quinoa', tags: ['gluten free','kosher','vegan']},
+                  {name: 'hamburger', tags: ['kosher']},
+                  {name: 'kale', tags: ['gluten free','kosher','vegan']}]
+        }
+      },
+      allFilters: {
+        type: Array,
+        value: function() {
+          return ['gluten free','kosher','vegan'];
+        }
+      },
+      selectedFilters: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      }
+    },
+    listeners: {
+      'chips.px-chip-tapped': '_removeSearchTag'
+    },
+    _handleSearchSelected: function(evt) {
+      var filter = evt.detail;
+      if (this.selectedFilters.indexOf(filter) === -1) {
+        this.push('selectedFilters', filter);
+        Polymer.dom(this.root).querySelector('px-typeahead').inputValue= '';
+      }
+    },
+    _removeSearchTag: function(evt) {
+      var filter = evt.target.innerText;
+      var trimFilter = filter.trim();
+      if (this.selectedFilters.indexOf(trimFilter) > -1) {
+        var index = this.selectedFilters.indexOf(trimFilter);
+        this.splice('selectedFilters', index, 1);
+      }
+    },
+    _getFoodFilter: function(selectedFilters) {
+      return function(item) {
+        return arraysIntersect(selectedFilters, item.tags);
+      }
+    }
+  });
+
+  function arraysIntersect(a1, a2) {
+    for (var i=0; i<a1.length; i++) {
+      if (a2.indexOf(a1[i]) > -1) return true;
+    }
+    return false;
+  }
+</script>
+</dom-module>

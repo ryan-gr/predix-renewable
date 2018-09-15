@@ -1,0 +1,879 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "The datetime components rely on [Moment.js](https://momentjs.com/) and [Moment Timezone](https://momentjs.com/timezone/).\n\n### Usage\n\n    <px-datetime-range-panel\n      from={{...}}\n      to={{...}}>\n    </px-datetime-range-panel>\n\n\n### Styling\n\nThe following custom properties are available for styling. Please also refer to px-forms-design, px-calendar-picker, px-datetime-field, and px-datetime-common for additional style variables used by this component.\n\nCustom property | Description\n:----------------|:-------------\n`--px-range-panel-border-color` | Border color used within the datetime range panel\n`--px-range-panel-background-color` | Background color for the datetime range panel\n`--px-range-panel-z-index` | The z-index for the datetime range panel",
+      "summary": "",
+      "path": "px-datetime-range-panel.html",
+      "properties": [
+        {
+          "name": "fromMoment",
+          "type": "Object",
+          "description": "Moment object start date & time",
+          "privacy": "private",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-range-behavior.html",
+            "start": {
+              "line": 19,
+              "column": 4
+            },
+            "end": {
+              "line": 22,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "inheritedFrom": "PxDatetimeBehavior.rangeMoments"
+        },
+        {
+          "name": "toMoment",
+          "type": "Object",
+          "description": "Moment object end date & time",
+          "privacy": "private",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-range-behavior.html",
+            "start": {
+              "line": 28,
+              "column": 4
+            },
+            "end": {
+              "line": 31,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "inheritedFrom": "PxDatetimeBehavior.rangeMoments"
+        },
+        {
+          "name": "presetRanges",
+          "type": "Object",
+          "description": "(optional)\n\nThe preset date/time ranges to be displayed.\n\n```\n  [\n   {\n     \"displayText\": \"Yesterday\",\n     \"startDateTime\": moment().subtract(1, 'days').toISOString(),\n     \"endDateTime\": moment().startOf('day').toISOString()\n   },\n   {\n     \"displayText\": \"Last 12 Hours\",\n     \"startDateTime\": \"2013-02-04T10:44:30.652Z\",\n     \"endDateTime\": \"2013-02-04T22:49:30.652Z\"\n   },\n   {\n     \"displayText\": \"Last 12 Hours\",\n     \"startDateTime\": function() {return moment().subtract(1, 'days').toISOString();},\n     \"endDateTime\": function() {return moment().startOf('day').toISOString();}\n   }\n  ]\n```",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 225,
+              "column": 6
+            },
+            "end": {
+              "line": 247,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "[]"
+        },
+        {
+          "name": "fromBaseDate",
+          "type": "Object",
+          "description": "(optional)\n\nReflects the date currently used by the 'from' calendar to determine what it should\nbe showing, i.e what month, year or year range. ISO8601 string",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 159,
+              "column": 6
+            },
+            "end": {
+              "line": 166,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "observer": "\"_fromBaseDateChanged\""
+            }
+          }
+        },
+        {
+          "name": "toBaseDate",
+          "type": "Object",
+          "description": "(optional)\n\nReflects the date currently used by the 'to' calendar to determine what it should\nbe showing, i.e what month, year or year range. ISO8601 string",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 175,
+              "column": 6
+            },
+            "end": {
+              "line": 182,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "observer": "\"_toBaseDateChanged\""
+            }
+          }
+        },
+        {
+          "name": "hidden",
+          "type": "boolean",
+          "description": "True if the modal is hidden.  Must be declared as a property to reference (below) in IE 10.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 187,
+              "column": 6
+            },
+            "end": {
+              "line": 189,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "hidePresets",
+          "type": "boolean",
+          "description": "(optional)\nIf set the presets won't be shown",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 194,
+              "column": 6
+            },
+            "end": {
+              "line": 197,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "hideTime",
+          "type": "boolean",
+          "description": "Whether time should be shown",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 251,
+              "column": 6
+            },
+            "end": {
+              "line": 254,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "timeFormat",
+          "type": "string",
+          "description": "Moment format used for the time",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 258,
+              "column": 7
+            },
+            "end": {
+              "line": 261,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"HH:mm:ss A\""
+        },
+        {
+          "name": "_internalSet",
+          "type": "boolean",
+          "description": "Whether the moment objects are being set internally (=from this component)",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 265,
+              "column": 6
+            },
+            "end": {
+              "line": 268,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_fromTimeIsValid",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 269,
+              "column": 6
+            },
+            "end": {
+              "line": 272,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "_toTimeIsValid",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 273,
+              "column": 6
+            },
+            "end": {
+              "line": 276,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "timeIsValid",
+          "type": "boolean",
+          "description": "computed from `_fromTimeIsValid`, `_toTimeIsValid`, and `hideTime`",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 280,
+              "column": 6
+            },
+            "end": {
+              "line": 283,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "_canApply",
+          "type": "boolean",
+          "description": "true if the range currently selected can be applied (right order and time valid)",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 287,
+              "column": 6
+            },
+            "end": {
+              "line": 290,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_localeChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-range-behavior.html",
+            "start": {
+              "line": 79,
+              "column": 2
+            },
+            "end": {
+              "line": 89,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "pxDatetimeRangeBehavior"
+        },
+        {
+          "name": "_timeZoneChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 309,
+              "column": 4
+            },
+            "end": {
+              "line": 322,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_validateRangeOrder",
+          "description": "Validation for the range. Makes sure the ranges are in chronological order",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/px-datetime-common/px-datetime-range-behavior.html",
+            "start": {
+              "line": 110,
+              "column": 2
+            },
+            "end": {
+              "line": 117,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "fromMoment"
+            },
+            {
+              "name": "toMoment"
+            }
+          ],
+          "return": {
+            "type": "Boolean",
+            "desc": "true if chronological order, false otherwise"
+          },
+          "inheritedFrom": "pxDatetimeRangeBehavior"
+        },
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 299,
+              "column": 4
+            },
+            "end": {
+              "line": 308,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_presetSelected",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 324,
+              "column": 4
+            },
+            "end": {
+              "line": 364,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_validatePresetDates",
+          "description": "Validates a preset start date based on blockPastDate/blockFutureDate/minDate/maxDate",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 369,
+              "column": 4
+            },
+            "end": {
+              "line": 422,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "start"
+            },
+            {
+              "name": "end"
+            }
+          ]
+        },
+        {
+          "name": "_validateDateBlock",
+          "description": "Validates a date against blockPastDate/blockFutureDate/minDate/maxDate",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 427,
+              "column": 4
+            },
+            "end": {
+              "line": 434,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "today"
+            }
+          ]
+        },
+        {
+          "name": "_resetRange",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 436,
+              "column": 4
+            },
+            "end": {
+              "line": 440,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "rangeObject"
+            }
+          ]
+        },
+        {
+          "name": "_rangeIsSelected",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 442,
+              "column": 4
+            },
+            "end": {
+              "line": 446,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_fromPicked",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 448,
+              "column": 4
+            },
+            "end": {
+              "line": 488,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_toPicked",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 490,
+              "column": 4
+            },
+            "end": {
+              "line": 530,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_areConsecutiveMonth",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 532,
+              "column": 4
+            },
+            "end": {
+              "line": 538,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "fromBaseDate"
+            },
+            {
+              "name": "toBaseDate"
+            }
+          ]
+        },
+        {
+          "name": "_fromBaseDateChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 540,
+              "column": 4
+            },
+            "end": {
+              "line": 551,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_toBaseDateChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 553,
+              "column": 4
+            },
+            "end": {
+              "line": 564,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_updateFromCalendar",
+          "description": "if the change comes from the \"outside\" synchronize the calendar",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 568,
+              "column": 4
+            },
+            "end": {
+              "line": 574,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_updateToCalendar",
+          "description": "if the change comes from the \"outside\" synchronize the calendar",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 578,
+              "column": 4
+            },
+            "end": {
+              "line": 584,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_canApplyComputed",
+          "description": "can apply if range is in the right order and times are valid (or not shown)",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 588,
+              "column": 4
+            },
+            "end": {
+              "line": 590,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "timeIsValid"
+            },
+            {
+              "name": "fromMoment"
+            },
+            {
+              "name": "toMoment"
+            }
+          ]
+        },
+        {
+          "name": "_getTimeIsValid",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 592,
+              "column": 4
+            },
+            "end": {
+              "line": 594,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "_fromTimeIsValid"
+            },
+            {
+              "name": "_toTimeIsValid"
+            },
+            {
+              "name": "hideTime"
+            }
+          ]
+        },
+        {
+          "name": "_getFieldClass",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 596,
+              "column": 4
+            },
+            "end": {
+              "line": 600,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "showButtons"
+            }
+          ]
+        },
+        {
+          "name": "_handleButtonClick",
+          "description": "when the cancel button is clicked and presets are showing, reset the presets",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 605,
+              "column": 4
+            },
+            "end": {
+              "line": 610,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "evt"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 142,
+          "column": 10
+        },
+        "end": {
+          "line": 612,
+          "column": 3
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "preset-ranges",
+          "description": "(optional)\n\nThe preset date/time ranges to be displayed.\n\n```\n  [\n   {\n     \"displayText\": \"Yesterday\",\n     \"startDateTime\": moment().subtract(1, 'days').toISOString(),\n     \"endDateTime\": moment().startOf('day').toISOString()\n   },\n   {\n     \"displayText\": \"Last 12 Hours\",\n     \"startDateTime\": \"2013-02-04T10:44:30.652Z\",\n     \"endDateTime\": \"2013-02-04T22:49:30.652Z\"\n   },\n   {\n     \"displayText\": \"Last 12 Hours\",\n     \"startDateTime\": function() {return moment().subtract(1, 'days').toISOString();},\n     \"endDateTime\": function() {return moment().startOf('day').toISOString();}\n   }\n  ]\n```",
+          "sourceRange": {
+            "start": {
+              "line": 225,
+              "column": 6
+            },
+            "end": {
+              "line": 247,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "from-base-date",
+          "description": "(optional)\n\nReflects the date currently used by the 'from' calendar to determine what it should\nbe showing, i.e what month, year or year range. ISO8601 string",
+          "sourceRange": {
+            "start": {
+              "line": 159,
+              "column": 6
+            },
+            "end": {
+              "line": 166,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "to-base-date",
+          "description": "(optional)\n\nReflects the date currently used by the 'to' calendar to determine what it should\nbe showing, i.e what month, year or year range. ISO8601 string",
+          "sourceRange": {
+            "start": {
+              "line": 175,
+              "column": 6
+            },
+            "end": {
+              "line": 182,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "hide-presets",
+          "description": "(optional)\nIf set the presets won't be shown",
+          "sourceRange": {
+            "start": {
+              "line": 194,
+              "column": 6
+            },
+            "end": {
+              "line": 197,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "hide-time",
+          "description": "Whether time should be shown",
+          "sourceRange": {
+            "start": {
+              "line": 251,
+              "column": 6
+            },
+            "end": {
+              "line": 254,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "time-format",
+          "description": "Moment format used for the time",
+          "sourceRange": {
+            "start": {
+              "line": 258,
+              "column": 7
+            },
+            "end": {
+              "line": 261,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "time-is-valid",
+          "description": "computed from `_fromTimeIsValid`, `_toTimeIsValid`, and `hideTime`",
+          "sourceRange": {
+            "start": {
+              "line": 280,
+              "column": 6
+            },
+            "end": {
+              "line": 283,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "from-base-date-changed",
+          "description": "Fired when the `fromBaseDate` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "to-base-date-changed",
+          "description": "Fired when the `toBaseDate` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "px-datetime-range-panel"
+    }
+  ]
+}

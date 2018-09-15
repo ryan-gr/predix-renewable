@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Predix UI</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../polymer/polymer.html" />
+    <link rel="import" href="../../px-theme/px-theme-styles.html">
+    <link rel="import" href="../px-datetime-field.html" />
+    <custom-style>
+      <style include="px-theme-styles" is="custom-style"></style>
+    </custom-style>
+</head>
+
+<body>
+  <dom-bind>
+    <template is="dom-bind">
+      <h2>px-datetime-field</h2>
+      <px-datetime-field
+        block-future-dates
+        time-format="HH:mm:ss"
+        date-format="MM/DD/YY"
+        show-time-zone="dropdown"
+        max-date="{{maxDate}}"
+        required>
+      </px-datetime-field>
+      </br>
+      <px-datetime-field
+        block-future-dates
+        time-format="hh:mm:ss a"
+        date-format="MM/DD/YY"
+        show-time-zone="dropdown"
+        moment-obj="{{momentObj}}"
+        show-buttons>
+      </px-datetime-field>
+    </div>
+    </template>
+  </dom-bind>
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      var template = document.querySelector('template[is=dom-bind]');
+      template.momentObj = Px.moment().subtract(7, 'days');
+      template.maxDate = Px.moment().subtract(1, 'days');
+
+      // Support hybrid mode
+      var templatev1 = document.querySelector('dom-bind');
+      templatev1.momentObj = template.momentObj;
+      templatev1.maxDate = template.maxDate;
+    });
+  </script>
+</body>
+
+</html>

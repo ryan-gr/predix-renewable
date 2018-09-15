@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2018, General Electric
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+:host {
+  align-items: center;
+  position: relative;
+  display: inline-flex;
+  flex: 1;
+  cursor: pointer;
+  color: inherit;
+  stroke: inherit;
+  text-overflow: var(--px-data-grid-header-text-overflow, ellipsis);
+  overflow: hidden;
+}
+
+/* When a column is sorted we use a differnet color */
+:host([direction]){
+  color: var(--px-data-grid-cell-text-color--sorted, inherit);
+  stroke: var(--px-data-grid-cell-text-color--sorted, inherit);
+
+}
+
+/* When hovering revert back to parent's color, only needed because "sorted" has
+a different color. */
+:host(:hover),
+:host([direction]:hover){
+  color: inherit;
+  stroke: inherit;
+}
+
+/* Because of IE11 compatibility, we have to re-define the colors
+for :active here as it would seem that this pseudo-class does not propagate
+arcoss shadyDom boundaries. Ideally we'd just use "inherit" here
+and let the parent set the color, but not if we want it to wowrk in IE11.
+These rules and colors mirror what's been set in
+px-data-grid-header-cell.scss */
+:host(:active),
+:host([direction]:active){
+  color: var(--px-data-grid-header-text-color--active, inherit);
+  stroke: var(--px-data-grid-header-text-color--active, inherit);
+}
+
+[part="content"] {
+  overflow: hidden;
+  text-overflow: var(--px-data-grid-header-text-overflow, ellipsis);
+  pointer-events: none;
+  white-space: var(--px-data-grid-header-text-white-space, nowrap);
+
+  //Have to give a width in order for ellipsis to work inside a flexbox.
+  width: auto;
+  flex-shrink: 1;
+  flex-grow: 0;
+}
+
+[part="indicators"] {
+  white-space: nowrap;
+  color: inherit;
+  flex-grow: 1;
+  width: auto;
+}
+
+.order-icon {
+  --iron-icon-height: 8.5px;
+  --iron-icon-width: 8.5px;
+  stroke-width: 2.25;
+  padding-bottom: 1.5px;
+  margin-left: 5.5px;
+}

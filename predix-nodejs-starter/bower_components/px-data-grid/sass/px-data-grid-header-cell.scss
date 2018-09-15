@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) 2018, General Electric
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+:host {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding-top: 10px;
+  --px-dropdown-toggle-icon-size: 8px;
+  margin-left: calc(0px - var(--px-dropdown-toggle-icon-size));
+  --iron-icon-stroke-color: inherit;
+  color: var(--px-data-grid-header-text-color, inherit);
+  stroke: var(--px-data-grid-header-text-color, rgb(44,64,76));
+}
+
+px-icon {
+  --iron-icon-height: var(--px-dropdown-toggle-icon-size);
+  --iron-icon-width: var(--px-dropdown-toggle-icon-size);
+  cursor: pointer;
+  padding-bottom: 3px;
+  color: inherit;
+  --iron-icon-stroke-color: inherit;
+
+}
+
+px-dropdown {
+  text-transform: none;
+  --px-dropdown-content-font-size: 1rem;
+}
+
+px-dropdown[hidden] {
+  visibility: hidden;
+  display: inline-block !important;
+}
+
+:host ::slotted(vaadin-grid-sorter) {
+  align-items: center;
+}
+
+:host px-icon{
+  color: inherit;
+  stroke: inherit;
+}
+
+:host(:hover),
+:host(:hover) px-icon{
+  color: var(--px-data-grid-header-text-color--hover, inherit);
+  fill: var(--px-data-grid-header-text-color--hover, rgb(44,64,76));
+  stroke: var(--px-data-grid-header-text-color--hover, rgb(44,64,76));
+}
+
+:host(:active),
+:host(:active) px-icon{
+  color: var(--px-data-grid-header-text-color--active, inherit);
+  fill: var(--px-data-grid-header-text-color--active, rgb(44,64,76));
+  stroke: var(--px-data-grid-header-text-color--active, rgb(44,64,76));
+}
+
+
+

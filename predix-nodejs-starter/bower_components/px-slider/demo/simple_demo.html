@@ -1,0 +1,37 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>px-slider Demo</title>
+    <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
+    <link rel="import" href="../px-slider.html" />
+    <link rel="import" href="../../px-theme/px-theme-styles.html" />
+    <custom-style>
+      <style include="px-theme-styles" is="custom-style">
+        html {
+          font-size: .9375rem;
+        }
+      </style>
+    </custom-style>
+  </head>
+
+  <body>
+    <h3>Demo</h3>
+    <br />
+    <h4>Single Value</h4>
+
+    <div id="mainDiv" style="width: 100%;">
+      <px-slider id="slider" value="50" min="1" max="98" step="0.05"></px-slider>
+
+      <px-slider id="sliderMulti" value="20" end-value="80" min="-20" max="100" is-range></px-slider>
+
+    </div>
+  </body>
+
+</html>

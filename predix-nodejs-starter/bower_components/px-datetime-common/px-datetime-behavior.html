@@ -1,0 +1,124 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="px-datetime-shared-behavior.html"/>
+
+<script>
+(function() {
+  var PxDatetimeBehavior = window.PxDatetimeBehavior = (window.PxDatetimeBehavior || {});
+
+  /**
+   * For all `px-{datetime}-{picker}` components.
+   * Dependencies: momentjs
+   *
+   * @polymerBehavior PxDatetimeBehavior.SingleMoment
+   */
+  PxDatetimeBehavior.SingleMoment = [{
+    properties: {
+      /**
+       * Moment value with the date or time to display.  Will be parsed according to the moment format. (See momentFormat property.)
+       */
+      momentObj: {
+        type: Object,
+        notify: true,
+        value: function() {
+          return null;
+        }
+      }
+    },
+
+    observers: ['_localeChanged(language)',
+                '_timeZoneChanged(timeZone)'],
+
+    /**
+     * Make sure the moment obj pick up the possibly new moment locale
+     */
+    _localeChanged: function() {
+      if(this.language !== undefined && this.momentObj) {
+        this.set('momentObj', this.momentObj.locale(Px.moment.locale()));
+      }
+    },
+    /**
+     * Makes sure the moment object reflects the right timezone.
+     */
+    _timeZoneChanged: function() {
+      if(this.timeZone !== undefined && this.momentObj) {
+        var newMom = this.momentObj.clone().tz(this.timeZone);
+        this.set('momentObj', newMom);
+      }
+    }
+  }, PxDatetimeBehavior.Shared];
+
+  /**
+   * Adds a temp moment object that can be applied or used to rollback
+   * Dependencies: momentjs
+   *
+   * @polymerBehavior PxDatetimeBehavior.TempMoment
+   */
+  PxDatetimeBehavior.TempMoment = [{
+    properties: {
+      /**
+       * temporary moment object used for validation and display. This
+       * object should be used by subcomponents when we want to "try"
+       * a value and see the result of validation AND/OR give us the
+       * ability to rollback (cancel) or apply
+       */
+      _tempMomentObj: {
+        type: Object,
+        notify: true
+      }
+    },
+
+    observers: ['_localeChangedTemp(language)',
+                '_timeZoneChangedTemp(timeZone)',
+                //momentObj is the source of truth and should always
+                //trump temp if changed
+                '_rollbackTempMoment(momentObj)'],
+
+    /**
+     * Applies value of temp moment to public momentObj
+     */
+    _applyTempMoment: function() {
+      if(this.momentObj === null || this._tempMomentObj === null || this.momentObj.toISOString() !== this._tempMomentObj.toISOString()) {
+        this.set('momentObj', this._tempMomentObj);
+      }
+    },
+    /**
+     * Rollback value of temp moment to use public momentObj
+     */
+     _rollbackTempMoment: function() {
+      this.set('_tempMomentObj', this.momentObj);
+    },
+    /**
+     * Make sure the moment obj pick up the possibly new moment locale
+     */
+     _localeChangedTemp: function() {
+      if(this.language !== undefined && this._tempMomentObj) {
+        this.set('_tempMomentObj', this._tempMomentObj.locale(Px.moment.locale()));
+      }
+    },
+    /**
+     * Makes sure the moment object reflects the right timezone.
+     */
+     _timeZoneChangedTemp: function() {
+      if(this.timeZone !== undefined && this._tempMomentObj) {
+        var newMom = this._tempMomentObj.clone().tz(this.timeZone);
+        this.set('_tempMomentObj', newMom);
+      }
+    }
+  }, PxDatetimeBehavior.SingleMoment];
+})();
+</script>

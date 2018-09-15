@@ -1,0 +1,182 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+    Relative paths assume component is being run from inside an app or another component, where dependencies are flat
+    siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
+    'gulp serve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
+-->
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../px-icon-set/px-icon-set.html"/>
+<link rel="import" href="../px-icon-set/px-icon.html"/>
+<link rel="import" href="css/px-chip-styles.html"/>
+<link rel="import" href="../iron-a11y-keys/iron-a11y-keys.html"/>
+
+<!--
+
+### Usage
+A Static Chip is a persistent object that can be toggled on and off.
+The static chip is not meant to be dismissed or removed. A Static Chip is best used for curated filters.
+Curated filters will allow a user to filter a page based on commonly used filter criteria.
+
+    <px-chip content="Some text here"></px-chip>
+
+An Actionable Chip is an object that represents complex information and allows for actions and states.
+An Actionable Chip can be user generated and can be temporary. Actionable Chip is best used for user-generated filters.
+An Actionable Chip will allow a user to generate a filter that can be applied to a page and allow the user to remove the filter on demand.
+
+    <px-chip content="Some text here" icon="px-utl:close" show-icon not-selectable> </px-chip>
+
+### Styling
+The following custom properties are available for styling:
+
+Custom property | Description
+:----------------|:-------------
+`--px-chip-background-color` | Background color for chip
+`--px-chip-background-color--hover`| Background color for chip on hover
+`--px-chip-background-color--selected` | Background color for chip on selected
+`--px-chip-border-color` | Border or outline color for chip
+`--px-chip-border-color--hover` | Border or outline color for chip on hover
+`--px-chip-border-color--selected` | Border or outline color for chip on selected
+`--px-chip-icon-color` | Icon color
+`--px-chip-icon-color--hover` | Icon color on hover
+`--px-chip-text-color` | Text color for chip content
+`--px-chip-text-color--selected` | Text color for chip content on selected
+`--px-chip-max-width` | Max width of the chip (default: 120px)
+
+@element px-chip
+@blurb A chip is a representation of an object or a series of information.
+@homepage index.html
+@demo index.html
+-->
+
+<dom-module id="px-chip">
+  <template>
+    <style include="px-chip-styles"></style>
+    <iron-a11y-keys target="[[_chipContent]]" keys="space enter" on-keys-pressed="_handleTapped"></iron-a11y-keys>
+    <div class="chip zeta" selected$="[[selected]]" show-icon$=[[showIcon]]>
+      <div class="flexContainer">
+        <span id="content" class="chip__content truncate" selected$="[[selected]]">{{content}}</span>
+        <template is="dom-if" if="{{showIcon}}">
+          <button class="btn btn--bare btn--icon chip__button">
+            <px-icon icon={{icon}} class="chip__button--icon"></px-icon>
+          </button>
+        </template>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'px-chip',
+
+    properties: {
+      /**
+      * The text to display in the chip.
+      *
+      * @property content
+      */
+      content: {
+        type: String
+      },
+      /**
+      * Set to true to show an icon in the chip, i.e. to create an Actionable Chip.
+      *
+      * @property selected
+      */
+      showIcon: {
+        type: Boolean,
+        value: false
+      },
+      /**
+      * An svg icon from px-icon-set that will be displayed to the right of the
+      * text content (if `showIcon` is set to true).
+      * If nothing is specified for `icon`, the icon will default to an X (px-utl:close).
+      *
+      * @property icon
+      */
+      icon: {
+        type: String,
+        value: 'px-utl:close'
+      },
+      /**
+      * Set to true to select this chip. This property can be used with a Static Chip.
+      *
+      * @property selected
+      */
+      selected: {
+        type: Boolean,
+        notify: true,
+        value: false
+      },
+      /**
+      * Set this property to true when `showIcon` is true. The chip should not
+      * be selectable when an icon is showing (i.e. if it is an Actionable Chip).
+      *
+      * @property notSelectable
+      */
+      notSelectable: {
+        type: Boolean,
+        value: false
+      },
+      /**
+      * A reference to the 'content' part of the chip. Used by iron-a11y-keys.
+      *
+      * @property _chipContent
+      */
+      _chipContent: {
+        type: HTMLElement
+      }
+    },
+    listeners: {
+      'tap': '_handleTapped'
+    },
+    ready: function() {
+      this._chipContent = this.$.content;
+      this._chipContent.setAttribute("tabindex", "0");
+    },
+    _handleTapped: function(e) {
+      let contentTapped = false;
+      let iconTapped = false;
+      const {rootTarget} = Polymer.dom(e);
+      if (e.detail.keyboardEvent) {
+        e.detail.keyboardEvent.preventDefault();
+      }
+
+      if (rootTarget.nodeName === 'SPAN' || rootTarget.nodeName === 'IRON-A11Y-KEYS') {
+        contentTapped = true;
+      } else if (rootTarget.nodeName === 'IRON-ICON' || rootTarget.nodeName === 'BUTTON') {
+        iconTapped = true;
+      }
+      e.stopPropagation();
+      if (!this.notSelectable) {
+        this.selected = !this.selected;
+      }
+
+      /**
+       * Event fired when a px-chip is tapped. Use this event to handle toggling
+       * (in the case of a selectable chip), or for taking an action (in the case of an actionable chip).
+       * The `evt.detail` object will contain current values for certain properties and variables, e.g.
+       *
+       *      {"content" : "Some text", "selected" : false, "contentTapped" : false, "iconTapped" : true}
+       * @event px-chip-tapped
+       */
+      this.fire('px-chip-tapped', { "content" : this.content, "selected" : this.selected, "contentTapped" : contentTapped, "iconTapped" : iconTapped });
+    }
+  });
+</script>

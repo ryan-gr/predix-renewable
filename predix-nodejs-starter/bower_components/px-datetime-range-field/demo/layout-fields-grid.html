@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Predix UI</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../polymer/polymer.html" />
+  <link rel="import" href="../../px-theme/px-theme-styles.html">
+  <link rel="import" href="../px-datetime-range-field.html" />
+
+  <custom-style>
+    <style include="px-theme-styles" is="custom-style">
+      .demo {
+        --px-datetime-range-field-margin-between-fields: 20px;
+      }
+    </style>
+  </custom-style>
+</head>
+<body>
+  <dom-bind>
+    <template is="dom-bind">
+      <div style="width: 100%; margin-bottom: 30px;">
+        <px-datetime-range-field class="demo"
+          full-width
+          from-moment="{{fromMoment}}"
+          to-moment="{{toMoment}}"
+          allow-wrap
+          show-field-titles
+          show-time-zone="abbreviatedText">
+        </px-datetime-range-field>
+      </div>
+      <div style="width: 100%; margin-bottom: 30px;">
+        <px-datetime-range-field class="demo"
+          full-width
+          from-moment="{{fromMoment}}"
+          to-moment="{{toMoment}}"
+          allow-wrap
+          hide-time
+          show-field-titles>
+        </px-datetime-range-field>
+      </div>
+      <div style="width: 100%; margin-bottom: 30px;">
+        <px-datetime-range-field class="demo"
+          full-width
+          from-moment="{{fromMoment}}"
+          to-moment="{{toMoment}}"
+          allow-wrap
+          hide-date
+          show-field-titles
+          show-time-zone="abbreviatedText">
+        </px-datetime-range-field>
+      </div>
+      <div style="width: 100%; margin-bottom: 30px;">
+        <px-datetime-range-field class="demo"
+          full-width
+          from-moment="{{fromMoment}}"
+          to-moment="{{toMoment}}"
+          allow-wrap
+          date-format="MM/DD/YY"
+          show-field-titles>
+        </px-datetime-range-field>
+      </div>
+    </template>
+  </dom-bind>
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      var template = document.querySelector('template[is=dom-bind]');
+      template.fromMoment = Px.moment().startOf('day').subtract(5, 'days');
+      template.toMoment = Px.moment().startOf('day').subtract(1, 'days');
+
+      // Support hybrid mode
+      var templatev1 = document.querySelector('dom-bind');
+      templatev1.fromMoment = template.fromMoment;
+      templatev1.toMoment = template.toMoment;
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,70 @@
+{
+  "name": "px-calendar-picker",
+  "version": "2.0.8",
+  "main": [
+    "px-calendar-picker.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "node_modules",
+    "bower_components",
+    "sass",
+    "HISTORY.md",
+    "CONTRIBUTING.md",
+    "OSS_Notice.pdf",
+    "scripts",
+    ".github",
+    ".editorconfig",
+    ".jshintrc",
+    ".gitignore",
+    "LICENSE.md",
+    "gulpfile.js",
+    "monogram-wdmk.png",
+    "README.md",
+    "wct.conf.json",
+    "px-calendar-picker.png"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "px-datetime-common": "^3.0.0",
+    "px-icon-set": "^2.0.0"
+  },
+  "devDependencies": {
+    "px-theme": "^3.0.0",
+    "px-demo": "^3.0.0",
+    "px-buttons-design": "^2.0.0",
+    "px-tables-design": "^2.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-actionable-design": "^2.0.0",
+    "px-spacing-design": "^1.0.0",
+    "web-component-tester": "^6.4.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  },
+  "homepage": "https://github.com/predixdesignsystem/px-calendar-picker",
+  "_release": "2.0.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.8",
+    "commit": "67c48c51b6cdea581e8f81b2a281d680a029139f"
+  },
+  "_source": "https://github.com/predixdesignsystem/px-calendar-picker.git",
+  "_target": "^2.0.0",
+  "_originalSource": "px-calendar-picker"
+}

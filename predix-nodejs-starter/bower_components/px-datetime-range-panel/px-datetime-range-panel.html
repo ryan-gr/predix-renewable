@@ -1,0 +1,591 @@
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../px-datetime-common/px-datetime-presets.html"/>
+<link rel="import" href="../px-datetime-common/px-datetime-buttons.html"/>
+<link rel="import" href="../px-datetime-common/px-datetime-button-behavior.html"/>
+<link rel="import" href="../px-datetime-common/px-datetime-range-behavior.html"/>
+<link rel="import" href="../px-datetime-field/px-datetime-field.html"/>
+<link rel="import" href="../px-calendar-picker/px-calendar-picker.html"/>
+<link rel="import" href="../app-localize-behavior/app-localize-behavior.html"/>
+<link rel="import" href="css/px-datetime-range-panel-styles.html"/>
+
+<!--
+The datetime components rely on [Moment.js](https://momentjs.com/) and [Moment Timezone](https://momentjs.com/timezone/).
+
+### Usage
+
+    <px-datetime-range-panel
+      from-moment={{...}}
+      to-moment={{...}}>
+    </px-datetime-range-panel>
+
+
+### Styling
+
+The following custom properties are available for styling. Please also refer to px-forms-design, px-calendar-picker, px-datetime-field, and px-datetime-common for additional style variables used by this component.
+
+Custom property | Description
+:----------------|:-------------
+`--px-range-panel-border-color` | Border color used within the datetime range panel
+`--px-range-panel-background-color` | Background color for the datetime range panel
+`--px-range-panel-z-index` | The z-index for the datetime range panel
+
+@element px-datetime-range-panel
+@blurb Element providing solution to date time range panel.
+@homepage index.html
+@demo index.html
+-->
+<dom-module id="px-datetime-range-panel">
+  <template>
+    <style include="px-datetime-range-panel-styles"></style>
+
+    <div id="rangepickerModal" class="rangepicker__box shadow-temporary">
+      <div class="flex">
+        <div>
+          <div class="flex">
+            <div class="u-mr+">
+              <px-calendar-picker
+                id="fromCalendar"
+                hide-next-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
+                block-future-dates="{{blockFutureDates}}"
+                block-past-dates="{{blockPastDates}}"
+                base-date="{{fromBaseDate}}"
+                time-zone="[[timeZone]]"
+                day-week-start-index="[[dayWeekStartIndex]]"
+                resources="[[resources]]"
+                language="[[language]]"
+                formats="[[formats]]"
+                min-date="[[minDate]]"
+                max-date="[[maxDate]]">
+              </px-calendar-picker>
+              <template is="dom-if" if="{{!hideTime}}">
+                <div class="flex flex--center u-mt--">
+                  <px-datetime-field
+                    id="time"
+                    class="box__time"
+                    moment-obj="{{fromMoment}}"
+                    hide-icon
+                    hide-date
+                    is-valid="{{_fromTimeIsValid}}"
+                    time-format="{{timeFormat}}"
+                    time-zone="[[timeZone]]"
+                    resources="[[resources]]"
+                    language="[[language]]"
+                    formats="[[formats]]"
+                    min-date="[[minDate]]"
+                    max-date="[[maxDate]]">
+                  </px-datetime-field>
+                </div>
+              </template>
+            </div>
+            <div>
+              <px-calendar-picker
+                id="toCalendar"
+                hide-previous-button="{{_areConsecutiveMonth(fromBaseDate, toBaseDate)}}"
+                block-future-dates="{{blockFutureDates}}"
+                block-past-dates="{{blockPastDates}}"
+                base-date="{{toBaseDate}}"
+                time-zone="[[timeZone]]"
+                day-week-start-index="[[dayWeekStartIndex]]"
+                resources="[[resources]]"
+                language="[[language]]"
+                formats="[[formats]]"
+                min-date="[[minDate]]"
+                max-date="[[maxDate]]">
+              </px-calendar-picker>
+              <template is="dom-if" if="{{!hideTime}}">
+                <div class$="flex flex--center u-mt-- {{_getFieldClass(showButtons)}}">
+                  <px-datetime-field
+                    id="time"
+                    class="box__time"
+                    moment-obj="{{toMoment}}"
+                    hide-icon
+                    hide-date
+                    is-valid="{{_toTimeIsValid}}"
+                    time-format="{{timeFormat}}"
+                    time-zone="[[timeZone]]"
+                    resources="[[resources]]"
+                    language="[[language]]"
+                    formats="[[formats]]"
+                    min-date="[[minDate]]"
+                    max-date="[[maxDate]]">
+                  </px-datetime-field>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <template is="dom-if" if="{{!hidePresets}}">
+          <px-datetime-presets
+            id="presets"
+            class="flex flex--col u-ml+ u-mr-"
+            preset-ranges="{{presetRanges}}"
+            resources="[[resources]]"
+            language="[[language]]"
+            formats="[[formats]]">
+          </px-datetime-presets>
+        </template>
+      </div>
+      <template is="dom-if" if="{{showButtons}}">
+        <div class="flex flex--row--rev u-mt+">
+          <px-datetime-buttons
+            is-submit-button-valid="[[_canApply]]"
+            resources="[[resources]]"
+            language="[[language]]"
+            formats="[[formats]]">
+          </px-datetime-buttons>
+        </div>
+      </template>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'px-datetime-range-panel',
+    behaviors: [
+      PxDatetimeBehavior.Range,
+      PxDatetimeBehavior.Buttons
+    ],
+
+    properties: {
+
+      /**
+       * Reflects the date currently used by the 'from' calendar to determine what it should
+       * be showing, i.e what month, year or year range.
+       */
+      fromBaseDate: {
+        type: Object,
+        notify: true,
+        observer: '_fromBaseDateChanged'
+      },
+      /**
+       * Reflects the date currently used by the 'to' calendar to determine what it should
+       * be showing, i.e what month, year or year range.
+       */
+      toBaseDate: {
+        type: Object,
+        notify: true,
+        observer: '_toBaseDateChanged'
+      },
+      /**
+       * True if the modal is hidden.  Must be declared as a property to reference (below) in IE 10.
+       * @private
+       */
+      hidden: {
+        type: Boolean
+      },
+      /**
+       * Presets won't be shown
+       */
+      hidePresets: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * The preset date/time ranges to be displayed.
+       *
+       *```
+       *   [
+       *    {
+       *      "displayText": "Yesterday",
+       *      "startDateTime": moment().subtract(1, 'days').toISOString(),
+       *      "endDateTime": moment().startOf('day').toISOString()
+       *    },
+       *    {
+       *      "displayText": "Last 12 Hours",
+       *      "startDateTime": "2013-02-04T10:44:30.652Z",
+       *      "endDateTime": "2013-02-04T22:49:30.652Z"
+       *    },
+       *    {
+       *      "displayText": "Last 12 Hours",
+       *      "startDateTime": function() {return moment().subtract(1, 'days').toISOString();},
+       *      "endDateTime": function() {return moment().startOf('day').toISOString();}
+       *    }
+       *   ]
+       * ```
+       *
+       * @default Last 7 Days + This Month + Last Month
+       */
+      presetRanges: {
+        type: Object,
+        value: function() {
+          var now = Px.moment.tz(this.timeZone);
+          return [
+            {
+              "displayText": "Last 7 Days",
+              "startDateTime": now.clone().subtract(7, 'days').startOf('day'),
+              "endDateTime": now.clone().endOf('day')
+            },
+            {
+              "displayText": "This Month",
+              "startDateTime": now.clone().startOf('month'),
+              "endDateTime": now.clone().endOf('month')
+            },
+            {
+              "displayText": "Last Month",
+              "startDateTime": now.clone().subtract(1, 'months').startOf('month'),
+              "endDateTime": now.clone().subtract(1, 'months').endOf('month')
+            }
+          ];
+        }
+      },
+      /**
+       * Will prevent time from being displayed
+       */
+      hideTime: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Moment format used for the time
+       */
+       timeFormat: {
+        type: String,
+        value: 'HH:mm:ss A'
+      },
+      /**
+       * Whether the moment objects are being set internally (=from this component)
+       */
+      _internalSet: {
+        type: Boolean,
+        value: false
+      },
+      _fromTimeIsValid: {
+        type: Boolean,
+        value: true
+      },
+      _toTimeIsValid: {
+        type: Boolean,
+        value: true
+      },
+      /**
+       * computed from `_fromTimeIsValid`, `_toTimeIsValid`, and `hideTime`
+       */
+      timeIsValid: {
+        type: Boolean,
+        notify: true,
+        computed: '_getTimeIsValid(_fromTimeIsValid, _toTimeIsValid, hideTime)'
+      },
+      /**
+       * True if the range currently selected can be applied (right order and time valid)
+       * Used to determine if the apply button is active (true) or disabled (false)
+       */
+      _canApply: {
+        type: Boolean,
+        computed: '_canApplyComputed(timeIsValid, fromMoment, toMoment, allowApply)'
+      },
+      /**
+       * Controls if the `_canApply`, which controls the apply button, is true or false.
+       * false : `_canApply` will be false
+       * true : doesn't force a false on `_canApply`. It will rely on `timeIsValid`, `fromMoment`,
+       * `toMoment` to calculate the property
+       *
+       * Used in rangepicker
+       */
+      allowApply: {
+        type: Boolean
+      }
+    },
+    observers:[
+      '_updateFromCalendar(fromMoment)',
+      '_updateToCalendar(toMoment)'
+    ],
+    listeners: {
+      'px-datetime-button-clicked': '_handleButtonClick'
+    },
+    ready: function() {
+      var fromHandler = this._fromPicked.bind(this),
+          toHandler = this._toPicked.bind(this),
+          presetHandler = this._presetSelected.bind(this);
+
+      this.$.fromCalendar.addEventListener('px-date-selected', fromHandler);
+      this.$.toCalendar.addEventListener('px-date-selected', toHandler);
+      this.addEventListener('px-preset-selected', presetHandler);
+    },
+
+    _presetSelected: function(e) {
+      var start= {}, end= {};
+      if(typeof e.detail.startDateTime === "function") {
+        start = Px.moment.tz(e.detail.startDateTime(), this.timeZone);
+      } else {
+        start = Px.moment.tz(e.detail.startDateTime, this.timeZone);
+      }
+
+      if (typeof e.detail.endDateTime === "function"){
+        end = Px.moment.tz(e.detail.endDateTime(), this.timeZone);
+      } else {
+        end = Px.moment.tz(e.detail.endDateTime, this.timeZone);
+      }
+
+      this._internalSet = true;
+
+      //show appropriate month
+      //set 'to' calendar first to avoid blocking the from calendar
+      if(end.isAfter(start.clone().add(1, 'months'), 'month')) {
+        this.set('toBaseDate', end.clone());
+      } else {
+        this.set('toBaseDate', start.clone().add(1, 'months'));
+      }
+      this.set('fromBaseDate', start.clone());
+
+      //make sure those presets are allowed
+      var validity = this._validatePresetDates(start, end);
+
+      if(validity) {
+        //make sure we clone so instances are not shared
+        this.$.fromCalendar.fromMoment = validity.start.clone();
+        this.$.toCalendar.fromMoment = validity.start.clone();
+        this.set('fromMoment', validity.preserveStartTime ? this._preserveTime(this.fromMoment, validity.start.clone()) : validity.start.clone());
+
+        this.$.fromCalendar.toMoment = validity.end.clone();
+        this.$.toCalendar.toMoment = validity.end.clone();
+        this.set('toMoment', validity.preserveEndTime ? this._preserveTime(this.toMoment, validity.end.clone()) : validity.end.clone());
+      }
+
+      this._internalSet = false;
+    },
+
+    /**
+     * Validates a preset start date based on blockPastDate/blockFutureDate/minDate/maxDate
+     */
+    _validatePresetDates: function(start, end) {
+      var today = Px.moment.tz(Px.moment(), this.timeZone),
+          result = {
+            start: null,
+            end: null,
+            preserveStartTime: false,
+            preserveEndTime: false
+          },
+          startValid = this._validateDateBlock(start, today),
+          endValid = this._validateDateBlock(end, today);
+
+      if(!startValid.blockFutureValid || !startValid.blockMaxValid || !endValid.blockMinValid || !endValid.blockPastValid) {
+        //in this scenarios we know the whole range will be wrong
+        //so don't apply anything
+        return null;
+      }
+
+      if(!startValid.blockPastValid && !startValid.blockMinValid) {
+        //both block past date and min date are invalid, pick the
+        //latest one
+        result.start = today.isAfter(this.minDate) ? today : this.minDate;
+      } else if(!startValid.blockPastValid) {
+        //we select today, but effectively only used 'day' as the
+        //granularity. Make sure we preserve time then
+        result.start = today;
+        result.preserveStartTime = true;
+      } else if(!startValid.blockMinValid) {
+        result.start = this.minDate;
+      } else {
+        result.start = start;
+      }
+
+      if(!endValid.blockFutureValid && !endValid.blockMaxValid) {
+        //both future past date and max date are invalid, pick the
+        //earliest one
+        result.end = today.isBefore(this.maxDate) ? today : this.maxDate;
+      } else if(!endValid.blockFutureValid) {
+        //we select today, but effectively only used 'day' as the
+        //granularity. Make sure we preserve time then
+        result.end = today;
+        result.preserveEndTime = true;
+      } else if(!endValid.blockMaxValid) {
+        result.end = this.maxDate;
+      } else {
+        result.end = end;
+      }
+
+      return result;
+    },
+
+    /**
+     * Validates a date against blockPastDate/blockFutureDate/minDate/maxDate
+     */
+    _validateDateBlock: function(date, today) {
+      return {
+        blockFutureValid: !this.blockFutureDates || date.isSameOrBefore(today, 'day'),
+        blockPastValid: !this.blockPastDates || date.isSameOrAfter(today, 'day'),
+        blockMinValid: !this.minDate || date.isAfter(this.minDate),
+        blockMaxValid: !this.maxDate || date.isBefore(this.maxDate)
+      };
+    },
+
+    _resetRange: function(rangeObject) {
+      //order maters
+      rangeObject.toMoment = null;
+      rangeObject.fromMoment = null;
+    },
+
+    _rangeIsSelected: function() {
+      return (this.$.fromCalendar.fromMoment !== null && this.$.toCalendar.toMoment !== null) ||
+             (this.$.fromCalendar.fromMoment !== null && this.$.fromCalendar.toMoment !== null) ||
+             (this.$.toCalendar.fromMoment !== null && this.$.toCalendar.toMoment !== null);
+    },
+
+    _fromPicked: function(event) {
+      this._internalSet = true;
+
+      //reset if needed
+      if(this._rangeIsSelected()) {
+        this._resetRange(this.$.toCalendar);
+      }
+      if(!this.hidePresets) {
+        this.$$('px-datetime-presets').selectedItem = null;
+      }
+
+      //nothing selected, assume it's going to be the start date
+      if(this.$.fromCalendar.toMoment === null && this.$.toCalendar.toMoment === null && this.$.toCalendar.fromMoment === null) {
+        this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+      } else {
+
+        if(this.$.fromCalendar.toMoment) {
+        //range is picked solely on 'from' calendar
+
+          //swap dates if needed
+          if(event.detail.isBefore(this.fromMoment)) {
+            this.set('toMoment', this._preserveTime(this.toMoment, this.fromMoment.clone()));
+            this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+          } else {
+            this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+          }
+
+          //make sure 'to' calendar is aware of the range as well
+          this.$.toCalendar.fromMoment = this.fromMoment;
+          this.$.toCalendar.toMoment = this.toMoment;
+        } else {
+          //'to' moment selected from other calendar. Adjust both calendar so they
+          //display properly
+          this.$.toCalendar.toMoment = this.toMoment;
+          this.$.toCalendar.fromMoment = event.detail;
+          this.$.fromCalendar.toMoment = this.toMoment;
+          this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+        }
+      }
+      this._internalSet = false;
+    },
+
+    _toPicked: function(event) {
+      this._internalSet = true;
+
+      //reset if needed
+      if(this._rangeIsSelected()) {
+        this._resetRange(this.$.fromCalendar);
+      }
+      if(!this.hidePresets) {
+        this.$$('px-datetime-presets').selectedItem = null;
+      }
+
+      //nothing selected, assume it's going to be the end date
+      if(!this.$.fromCalendar.toMoment && !this.$.toCalendar.toMoment && !this.$.fromCalendar.fromMoment) {
+        this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+      } else {
+        if(this.$.toCalendar.toMoment) {
+          //range is picked solely on 'to' calendar
+
+          //swap dates if needed
+          if(event.detail.isAfter(this.toMoment)) {
+            this.set('fromMoment', this._preserveTime(this.fromMoment, this.toMoment.clone()));
+            this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+          } else {
+            this.set('fromMoment', this._preserveTime(this.fromMoment, event.detail));
+          }
+          //make sure both calendars reflects the right state
+          this.$.toCalendar.toMoment = this.toMoment;
+          this.$.toCalendar.fromMoment = this.fromMoment;
+          this.$.fromCalendar.fromMoment = this.fromMoment;
+          this.$.fromCalendar.toMoment = this.toMoment;
+        } else {
+          //from moment selected from other calendar. Adjust both calendar so they
+          //display properly
+          this.$.fromCalendar.toMoment = event.detail;
+          this.$.toCalendar.fromMoment = this.$.fromCalendar.fromMoment;
+          this.$.toCalendar.toMoment = event.detail;
+          this.set('toMoment', this._preserveTime(this.toMoment, event.detail));
+        }
+      }
+      this._internalSet = false;
+    },
+
+    _areConsecutiveMonth: function(fromBaseDate, toBaseDate) {
+      if(fromBaseDate && toBaseDate) {
+        return fromBaseDate.isSame(toBaseDate.clone().subtract(1, 'months'), 'month');
+      } else {
+        return false;
+      }
+    },
+
+    _fromBaseDateChanged: function() {
+      //make sure the new base date is at least the month before 'to'
+      if(this.fromBaseDate === null) {return}
+      if(!this._internalSet && this.fromBaseDate && this.toBaseDate && this.fromBaseDate.isSameOrAfter(this.toBaseDate, 'month')) {
+        this.set('fromBaseDate', Px.moment.tz(this.toBaseDate, this.timeZone).subtract(1, 'month'));
+      }
+
+      //don't allow the 'to' calendar to choose dates before 1 month after 'from' calendar
+      if(this.$.fromCalendar.isAtSelectionLevel) {
+        this.$.toCalendar.blockDatesBefore = Px.moment.tz(this.fromBaseDate, this.timeZone).add(1, 'month').startOf('month');
+      }
+    },
+
+    _toBaseDateChanged: function() {
+      if(this.toBaseDate === null) {return}
+      //make sure the new base date is at least the month after 'from'
+      if(!this._internalSet && this.fromBaseDate && this.toBaseDate && this.toBaseDate.isSameOrBefore(this.fromBaseDate, 'month')) {
+        this.set('toBaseDate', Px.moment.tz(this.fromBaseDate, this.timeZone).add(1, 'month'));
+      }
+
+      //don't allow the 'to' calendar to choose dates before 1 month after 'from' calendar
+      if(this.$.toCalendar.isAtSelectionLevel) {
+        this.$.fromCalendar.blockDatesAfter = Px.moment.tz(this.toBaseDate, this.timeZone).subtract(1, 'month').endOf('month');
+      }
+    },
+    /**
+     * if the change comes from the "outside" synchronize the calendar
+     */
+    _updateFromCalendar: function() {
+        if(!this._internalSet) {
+        this.$.fromCalendar.fromMoment = this.fromMoment;
+        this.$.toCalendar.fromMoment = this.fromMoment;
+        if(this.fromMoment && this.fromMoment !== null) {this.set('fromBaseDate', this.fromMoment);}
+      }
+    },
+    /**
+     * if the change comes from the "outside" synchronize the calendar
+     */
+    _updateToCalendar: function() {
+      if(!this._internalSet) {
+        this.$.fromCalendar.toMoment = this.toMoment;
+        this.$.toCalendar.toMoment = this.toMoment;
+        if(this.toMoment && this.toMoment !== null) {this.set('toBaseDate', this.toMoment);}
+      }
+    },
+    /**
+     * can apply if range is in the right order and times are valid (or not shown)
+     */
+    _canApplyComputed: function(timeIsValid, fromMoment, toMoment, allowApply) {
+      return this._validateRangeOrder(fromMoment, toMoment) && timeIsValid && allowApply;
+    },
+
+    _getTimeIsValid: function(_fromTimeIsValid, _toTimeIsValid, hideTime) {
+      return hideTime || (_fromTimeIsValid && _toTimeIsValid);
+    },
+
+    _getFieldClass: function(showButtons){
+      if(!showButtons){
+        return "u-mb+";
+      }
+    },
+
+    /**
+     * when the cancel button is clicked and presets are showing, reset the presets
+     */
+    _handleButtonClick: function(evt){
+      if(this.hidePresets === false && evt.detail.action === false){
+        var presets = Polymer.dom(this.root).querySelector('px-datetime-presets');
+        presets.selectedItem = {};
+      }
+    }
+
+  });
+</script>

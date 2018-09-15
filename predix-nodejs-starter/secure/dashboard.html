@@ -14,17 +14,30 @@
     <link rel="import" href="/px-simple-line-chart/px-simple-line-chart.html"></link>
     <link rel="import" href="/px-accordion/px-accordion.html"></link>
     <link rel="import" href="/px-toggle/px-toggle.html"></link>
+    <link rel="import" href="/px-threshold-bar/px-threshold-bar.html"></link>
     <link rel="import" href="/px-key-value-pair/px-key-value-pair.html"></link>
+    <link rel="import" href="/px-data-grid/px-data-grid.html"></link>
 
     <!-- <link rel="import" href="/px-vis/px-vis.html"/> -->
-    <link rel="import" href="/px-vis-timeseries/px-vis-timeseries.html"/>
+    <link rel="import" href="/px-vis-timeseries"/>
 
     <style media="screen">
       html, body {margin: 0;}
       body, html, .main-container, .sidebar {
         height: 100%;
         font-family: sans-serif;
-
+      }
+      px-branding-bar {
+        z-index: 4;
+      }
+      px-app-nav {
+        z-index: 3;
+      }
+      .main-container, .select-container {
+        transition: opacity 0.3s;
+      }
+      .select-container {
+        opacity: 0;
       }
       .main-container {
         display: flex;
@@ -50,7 +63,7 @@
         opacity: 0;
       }
       .sidebar {
-        max-width: 260px;
+        max-width: 340px;
         padding: 8px;
         box-shadow: 1px 3px 2px 1px lightgray;
         text-align: center;
@@ -83,22 +96,12 @@
     </style>
   </head>
   <body>
-    <!-- <px-panel opened position="left" background="light" fixed>
-      <div slot="content">
-        <img src='https://static.interestingengineering.com/images/OCTOBER/sizes/wind-turbine-white_resize_md.jpg'></img>
-      </div>
-    </px-panel> -->
     <px-branding-bar
     application-title="Ventus">
     </px-branding-bar>
 
-    <!-- <px-app-nav
-    items='[{"label":"Home","id":"home","icon":"px-fea:home"},{"label":"Alerts","id":"alerts","icon":"px-fea:alerts","metadata":{"openCases":"12","closedCases":"82"}},{"label":"Assets","id":"assets","icon":"px-fea:asset","children":[{"label":"Asset #1","id":"a1"},{"label":"Asset #2","id":"a2"}]},{"label":"Dashboards","id":"dashboards","icon":"px-fea:dashboard","children":[{"label":"See Live Truck View","id":"trucks","icon":"px-obj:truck"},{"label":"Track Orders","id":"orders","icon":"px-fea:orders"},{"label":"Analyze Invoices","id":"invoices","icon":"px-fea:templates"}]}]'
-    selected-route='["home"]'
-    selected-meta='{"item":{"label":"Home","id":"home","icon":"px-fea:home"},"path":[{"label":"Home","id":"home","icon":"px-fea:home"}],"route":["home"],"parent":null,"children":[],"siblings":[{"label":"Home","id":"home","icon":"px-fea:home"},{"label":"Alerts","id":"alerts","icon":"px-fea:alerts","metadata":{"openCases":"12","closedCases":"82"}},{"label":"Assets","id":"assets","icon":"px-fea:asset","children":[{"label":"Asset #1","id":"a1"},{"label":"Asset #2","id":"a2"}]},{"label":"Dashboards","id":"dashboards","icon":"px-fea:dashboard","children":[{"label":"See Live Truck View","id":"trucks","icon":"px-obj:truck"},{"label":"Track Orders","id":"orders","icon":"px-fea:orders"},{"label":"Analyze Invoices","id":"invoices","icon":"px-fea:templates"}]}]}'>
-    </px-app-nav> -->
     <px-app-nav
-    items='[{"label":"Home","id":"home","icon":"px-fea:home"}]'
+    items='[{"label":"Dashboard","id":"home","icon":"px-fea:dashboard"},{"label":"Turbine Select","id":"select","icon":"px-obj:wind-turbine"}]'
     selected-route='["home"]'
     selected-meta='{"item":{"label":"Home","id":"home","icon":"px-fea:home"},"path":[{"label":"Home","id":"home","icon":"px-fea:home"}],"route":["home"],"parent":null,"children":[],"siblings":[{"label":"Home","id":"home","icon":"px-fea:home"},{"label":"Alerts","id":"alerts","icon":"px-fea:alerts","metadata":{"openCases":"12","closedCases":"82"}},{"label":"Assets","id":"assets","icon":"px-fea:asset","children":[{"label":"Asset #1","id":"a1"},{"label":"Asset #2","id":"a2"}]},{"label":"Dashboards","id":"dashboards","icon":"px-fea:dashboard","children":[{"label":"See Live Truck View","id":"trucks","icon":"px-obj:truck"},{"label":"Track Orders","id":"orders","icon":"px-fea:orders"},{"label":"Analyze Invoices","id":"invoices","icon":"px-fea:templates"}]}]}'>
     </px-app-nav>
@@ -112,8 +115,6 @@
     </div>
     <div class='main-container'>
       <div class='sidebar'>
-        <!-- <img src='https://static.interestingengineering.com/images/OCTOBER/sizes/wind-turbine-white_resize_md.jpg'></img>
-        <a class='title'>Windy the Wind Turbine</a> -->
         <br>
         <px-accordion-group>
           <px-accordion
@@ -132,7 +133,7 @@
             uom=""
             size="delta">
           </px-key-value-pair>
-          <px-key-value-pair
+          <!-- <px-key-value-pair
             label="Latitude"
             value="123.12342"
             uom=""
@@ -143,7 +144,7 @@
             value="182.24314"
             uom=""
             size="delta">
-          </px-key-value-pair>
+          </px-key-value-pair> -->
 
           </px-accordion>
 
@@ -161,20 +162,21 @@
             label="Wind Speed"
             value="5"
             uom="m/s"
-            size="beta">
+            size="delta">
           </px-key-value-pair>
-          <!-- <px-key-value-pair
-            label="Wind Direction"
+          <px-key-value-pair
+            id="power-output-text"
+            label="Power Output"
             value="50"
-            uom="degrees"
-            size="beta">
-          </px-key-value-pair> -->
+            uom="kW"
+            size="delta">
+          </px-key-value-pair>
           <px-key-value-pair
             id="temperature-text"
             label="Temperature"
             value="20"
             uom="°C"
-            size="beta">
+            size="delta">
           </px-key-value-pair>
 
           </px-accordion>
@@ -193,7 +195,14 @@
             label="Wind Speed"
             value="5"
             uom="m/s"
-            size="beta">
+            size="delta">
+          </px-key-value-pair>
+          <px-key-value-pair
+            id="predicted-power-output-text"
+            label="Power Output"
+            value="5"
+            uom="kW"
+            size="delta">
           </px-key-value-pair>
 
           </px-accordion>
@@ -205,13 +214,14 @@
       <!-- display-threshold-title
       threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}' -->
       <div class='content'>
+        <br>
         <px-vis-timeseries
           debounce-resize-timing="250"
-          width="1200"
+          width="800"
           height="0"
           chart-horizontal-alignment="center"
           chart-vertical-alignment="center"
-          margin='{"top":30,"bottom":60,"left":65,"right":65}'
+          margin='{"top":30,"bottom":70,"left":65,"right":65}'
           tooltip-config='{}'
           register-config='{"type":"horizontal"}'
           selection-type="xy"
@@ -225,9 +235,26 @@
           chart-extents='{"x":["dynamic","dynamic"],"y":[-1,18]}'
           x-axis-config='{"title":"Date"}'
           y-axis-config='{"title":"Wind Speed","titleTruncation":false,"unit":"m/s","axis2":{"title":"Moving Average","titleTruncation":false,"unit":"m/s"}}'
-          navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+          navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'
+          interpolationFunction='curveBasisOpen'
+          disable-navigator='true'
+          event-data='[{"id":"123","time":1534291200000,"label":"Now"}]'
+          event-config='{"Now":{"color":"green","icon":"px-utl:flag","type":"px","offset":[0,0],"lineColor":"green","lineWeight":0, "enableTooltip":false}}'>
+
         </px-vis-timeseries>
       </div>
+    </div>
+    <div class='select-container'>
+      <px-data-grid
+        table-data='[{"farmId":"F0093","turbineId":"W1324","status":"Running"},{"farmId":"F0093","turbineId":"W1325","status":"Running"},{"farmId":"F0093","turbineId":"W1326","status":"Maintenance"}]'
+        columns='[{"name":"Farm ID","path":"farmId","renderer":"px-data-grid-string-renderer","editable":true,"frozen":false,"id":"farmId[string]"},{"name":"Turbine ID","path":"turbineId","renderer":"px-data-grid-string-renderer","editable":true,"frozen":false,"id":"turbineId[string]"},{"name":"Status","path":"status","frozen":false,"id":"status[string]"}]'
+        selection-mode="none"
+        table-actions='[{"name":"Export CSV","id":"CSV"}]'
+        item-actions='[{"name":"Analytics Dashboard","id":"dashboard"},{"name":"Toggle Maintenance","id":"mark"}]'
+        flex-to-size
+        highlight='[]'>
+
+      </px-data-grid>
     </div>
   </body>
   <script src="./scripts/timeseries_actual.js" charset="utf-8" type="application/javascript"></script>

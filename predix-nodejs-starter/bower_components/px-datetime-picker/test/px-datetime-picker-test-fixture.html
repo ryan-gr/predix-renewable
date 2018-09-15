@@ -1,0 +1,84 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web Component Test : Fixture for px-datetime-picker</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../polymer/polymer.html" />
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../px-theme/px-theme-styles.html" />
+  <link rel="import" href="../px-datetime-picker.html" />
+  <script src="px-datetime-picker-custom-tests.js"></script>
+</head>
+
+<body>
+  <custom-style>
+    <style include="px-theme-styles" is="custom-style"></style>
+  </custom-style>
+
+  <test-fixture id="datetime-picker">
+    <template>
+      <px-datetime-picker
+        id="datetime-picker"
+        time-zone="UTC">
+      </px-datetime-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="datetime-picker-buttons">
+    <template>
+      <px-datetime-picker
+        id="datetime-picker"
+        opened
+        time-zone="UTC"
+        show-buttons>
+      </px-datetime-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="datetime-picker-full-container">
+    <template>
+      <div id="fit" style="width: 350px; height: 250px; background-color:aliceblue"></div>
+      <px-datetime-picker
+        id="datetime-picker"
+        time-zone="UTC"
+        show-buttons
+        fill-container>
+      </px-datetime-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="datetime-picker-full-window">
+    <template>
+      <px-datetime-picker
+        id="datetime-picker"
+        time-zone="UTC"
+        show-buttons
+        hide-time
+        fill-container>
+      </px-datetime-picker>
+    </template>
+  </test-fixture>
+
+</body>
+
+</html>
