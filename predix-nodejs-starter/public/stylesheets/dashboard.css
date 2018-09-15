@@ -14,6 +14,7 @@ px-app-nav {
 }
 .select-container {
   opacity: 0;
+  display: none;
 }
 .main-container {
   display: flex;
