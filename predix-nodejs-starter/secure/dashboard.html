@@ -17,83 +17,8 @@
     <link rel="import" href="/px-threshold-bar/px-threshold-bar.html"></link>
     <link rel="import" href="/px-key-value-pair/px-key-value-pair.html"></link>
     <link rel="import" href="/px-data-grid/px-data-grid.html"></link>
-
-    <!-- <link rel="import" href="/px-vis/px-vis.html"/> -->
     <link rel="import" href="/px-vis-timeseries"/>
-
-    <style media="screen">
-      html, body {margin: 0;}
-      body, html, .main-container, .sidebar {
-        height: 100%;
-        font-family: sans-serif;
-      }
-      px-branding-bar {
-        z-index: 4;
-      }
-      px-app-nav {
-        z-index: 3;
-      }
-      .main-container, .select-container {
-        transition: opacity 0.3s;
-      }
-      .select-container {
-        opacity: 0;
-      }
-      .main-container {
-        display: flex;
-        align-items: stretch;
-      }
-      #loading-div {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background: white;
-        z-index: 1;
-        transition: opacity 0.3s;
-        opacity: 0;
-      }
-      #loading {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        text-align: center;
-        z-index: 2;
-        transform: translateX(-50%);
-        transition: opacity 0.3s;
-        opacity: 0;
-      }
-      .sidebar {
-        max-width: 340px;
-        padding: 8px;
-        box-shadow: 1px 3px 2px 1px lightgray;
-        text-align: center;
-      }
-      .sidebar > img {
-        border-radius: 100%;
-        width: 150px;
-        height: 150px;
-        margin: 16px;
-      }
-      .title {
-        display: block;
-        margin-bottom: 24px;
-      }
-      .content {
-        margin-top: 16px;
-        margin-left: 16px;
-      }
-      /*TODO: remove top part of accordian.*/
-      px-accordion-group .accordion__expand__collapse {
-        display: none;
-      }
-      px-accordion-group px-key-value-pair {
-        display: block;
-        text-align: left;
-        margin-left: 12px;
-        margin-bottom: 12px;
-      }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="./stylesheets/dashboard.css">
   </head>
   <body>
     <px-branding-bar
