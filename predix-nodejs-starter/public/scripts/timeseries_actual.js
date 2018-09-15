@@ -18,6 +18,17 @@ window.onkeypress = (e) => {
   if (e.keyCode == 57) previousDay();
 }
 
+const getPowerFromWindspeed = (ws) => {
+  const d = {3: 25.00, 4:171.00, 5:389.00, 6:704.00, 7:1136.00,
+    8:1674.00, 9: 2160.00, 10:2416.00, 11:2514.00, 12:2530.00}
+  if (ws > 12) return d[12];
+  if (ws < 3) return 0;
+  if (ws in d) return d[ws];
+  const lower = Math.floor(ws);
+  const higher = Math.ceil(ws);
+  return d[lower] + (d[higher] - d[lower]) * (ws - lower);
+}
+
 const startLoading = () => {
   document.querySelector('#loading').style.display = 'block';
   document.querySelector('#loading-div').style.display = 'block';
@@ -128,6 +139,7 @@ const getDataWithRange = (epochStart, epochEnd) => {
       console.log('latestTemperature', latestTemperature);
       updateCurrentTimeStamp(latestTime);
       document.querySelector('#wind-speed-text').setAttribute('value', latestWindSpeed);
+      document.querySelector('#power-output-text').setAttribute('value', getPowerFromWindspeed(latestWindSpeed));
       document.querySelector('#temperature-text').setAttribute('value', latestTemperature);
       document.querySelector('px-vis-timeseries').setAttribute('chart-data', JSON.stringify(graphData));
       console.log('querying analytics');
@@ -160,6 +172,7 @@ const getPredictedValue = (data) => {
       const predictedValue = JSON.parse(data.result).Prediction;
       console.log('predicted value', predictedValue);
       document.querySelector('#predicted-wind-speed-text').setAttribute('value', parseInt(predictedValue)/10);
+      document.querySelector('#predicted-power-output-text').setAttribute('value', getPowerFromWindspeed(parseInt(predictedValue)/10));
       endLoading();
 		}
 	};
