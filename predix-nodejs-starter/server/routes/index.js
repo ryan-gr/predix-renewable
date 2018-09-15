@@ -9,7 +9,8 @@ router.use(function(req,res,next){
 });
 
 router.get('/', function(req, res, next) {
-  res.sendFile('index.html');
+  //res.sendFile('login.html')
+  res.redirect('/login');;
 });
 
 module.exports = router;
