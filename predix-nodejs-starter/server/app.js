@@ -113,7 +113,7 @@ if (config.isUaaConfigured()) {
   	failureRedirect: '/'
   }), function(req, res) {
   	console.log('Redirecting to secure route...');
-  	res.redirect('/test');
+  	res.redirect('/dashboard');
     });
 
   // example of calling a custom microservice.
@@ -153,12 +153,12 @@ if (config.isUaaConfigured()) {
     //res.send('<h2>This is a sample secure route.</h2>');
   });
 
-  app.get('/test', passport.authenticate('main', {
+  app.get('/dashboard', passport.authenticate('main', {
     noredirect: true //Don't redirect a user to the authentication page, just show an error
     }), function(req, res) {
     console.log('Accessing the secure route');
     // modify this to send a secure.html file if desired.
-    res.sendFile(path.join(__dirname + '/../secure/test.html'));
+    res.sendFile(path.join(__dirname + '/../secure/dashboard.html'));
     //res.send('<h2>This is a sample secure route.</h2>');
   });
 

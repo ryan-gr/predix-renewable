@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Test Page</title>
+    <title>Ventus Dashboard</title>
     <script src="/webcomponentsjs/webcomponents-lite.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.js"></script> -->
     <link rel="import" href="/px-demo/px-demo.html"/>
@@ -30,10 +30,29 @@
         display: flex;
         align-items: stretch;
       }
+      #loading-div {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background: white;
+        z-index: 1;
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
+      #loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        text-align: center;
+        z-index: 2;
+        transform: translateX(-50%);
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
       .sidebar {
         width: 300px;
         padding: 8px;
-        box-shadow: 1px 0px 2px 1px lightgray;
+        box-shadow: 1px 3px 2px 1px lightgray;
         text-align: center;
       }
       .sidebar > img {
@@ -70,7 +89,7 @@
       </div>
     </px-panel> -->
     <px-branding-bar
-    application-title="Predix Design System">
+    application-title="Ventus">
     </px-branding-bar>
 
     <!-- <px-app-nav
@@ -83,31 +102,78 @@
     selected-route='["home"]'
     selected-meta='{"item":{"label":"Home","id":"home","icon":"px-fea:home"},"path":[{"label":"Home","id":"home","icon":"px-fea:home"}],"route":["home"],"parent":null,"children":[],"siblings":[{"label":"Home","id":"home","icon":"px-fea:home"},{"label":"Alerts","id":"alerts","icon":"px-fea:alerts","metadata":{"openCases":"12","closedCases":"82"}},{"label":"Assets","id":"assets","icon":"px-fea:asset","children":[{"label":"Asset #1","id":"a1"},{"label":"Asset #2","id":"a2"}]},{"label":"Dashboards","id":"dashboards","icon":"px-fea:dashboard","children":[{"label":"See Live Truck View","id":"trucks","icon":"px-obj:truck"},{"label":"Track Orders","id":"orders","icon":"px-fea:orders"},{"label":"Analyze Invoices","id":"invoices","icon":"px-fea:templates"}]}]}'>
     </px-app-nav>
+    <div id="loading-div">
 
+    </div>
+    <div id="loading">
+      <px-spinner
+        size="180">
+      </px-spinner>
+    </div>
     <div class='main-container'>
       <div class='sidebar'>
-        <img src='https://static.interestingengineering.com/images/OCTOBER/sizes/wind-turbine-white_resize_md.jpg'></img>
-        <a class='title'>Windy the Wind Turbine</a>
+        <!-- <img src='https://static.interestingengineering.com/images/OCTOBER/sizes/wind-turbine-white_resize_md.jpg'></img>
+        <a class='title'>Windy the Wind Turbine</a> -->
+        <br>
         <px-accordion-group>
           <px-accordion
           icons='{"more":"px-utl:chevron-right","less":"px-utl:chevron"}]}'
-          header-value="Status" opened>
+          header-value="Turbine Details" opened>
+
           <px-key-value-pair
-            label="Wind Speed"
-            value="5"
-            uom="km/h"
-            size="beta">
+            label="Farm ID"
+            value="F0093"
+            uom=""
+            size="delta">
           </px-key-value-pair>
           <px-key-value-pair
+            label="Turbine ID"
+            value="W1324"
+            uom=""
+            size="delta">
+          </px-key-value-pair>
+          <px-key-value-pair
+            label="Latitude"
+            value="123.12342"
+            uom=""
+            size="delta">
+          </px-key-value-pair>
+          <px-key-value-pair
+            label="Longitude"
+            value="182.24314"
+            uom=""
+            size="delta">
+          </px-key-value-pair>
+
+          </px-accordion>
+
+          <px-accordion
+          icons='{"more":"px-utl:chevron-right","less":"px-utl:chevron"}]}'
+          header-value="Current Status" opened>
+          <px-alert-label
+            id="current-time-text"
+            label="Thu Aug 16 2018 08:00:00 GMT+0800"
+            type="unknown"
+            style="display:block; margin-bottom: 10px;">
+          </px-alert-label>
+          <px-key-value-pair
+            id="wind-speed-text"
+            label="Wind Speed"
+            value="5"
+            uom="m/s"
+            size="beta">
+          </px-key-value-pair>
+          <!-- <px-key-value-pair
             label="Wind Direction"
             value="50"
             uom="degrees"
             size="beta">
-          </px-key-value-pair>
+          </px-key-value-pair> -->
           <px-key-value-pair
+            id="temperature-text"
             label="Temperature"
             value="20"
-            uom="degrees celcius"
+            uom="°C"
             size="beta">
           </px-key-value-pair>
 
@@ -115,18 +181,33 @@
 
           <px-accordion
           icons='{"more":"px-utl:chevron-right","less":"px-utl:chevron"}]}'
-          header-value="Extras" opened>
+          header-value="Predicted" opened>
+          <px-alert-label
+            id="predicted-time-text"
+            label="Thu Aug 16 2018 12:00:00 GMT+0800"
+            type="unknown"
+            style="display:block; margin-bottom: 10px;">
+          </px-alert-label>
+          <px-key-value-pair
+            id="predicted-wind-speed-text"
+            label="Wind Speed"
+            value="5"
+            uom="m/s"
+            size="beta">
+          </px-key-value-pair>
 
           </px-accordion>
 
         </px-accordion-group>
 
       </div>
-
+      <!-- threshold-data='[{"for":"y0","type":"max","value":15.4784},{"for":"y0","type":"min","value":9.6531}]' -->
+      <!-- display-threshold-title
+      threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}' -->
       <div class='content'>
         <px-vis-timeseries
           debounce-resize-timing="250"
-          width="900"
+          width="1200"
           height="0"
           chart-horizontal-alignment="center"
           chart-vertical-alignment="center"
@@ -137,16 +218,13 @@
           chart-data=''
           series-config='
             {"y0":
-              {"name":"y0","x":"timeStamp","y":"y0","yAxisUnit":"F","axis":{"id":"axis1","side":"left","number":"1"}},
+              {"name":"Wind Speed","x":"timeStamp","y":"y0","yAxisUnit":"m/s", "strokeWidth":"1", "axis":{"id":"axis1","side":"left","number":"1"}},
             "y1":
-              {"name":"y1","x":"timeStamp","y":"y1","yAxisUnit":"Hz","axis":{"id":"axis2","side":"right","number":"1"}}
+              {"name":"Moving Ave","x":"timeStamp","y":"y1","yAxisUnit":"m/s", "color":"rgb(255, 0, 0)", "strokeWidth":"0.5", "axis":{"id":"axis2","side":"right","number":"2"}}
             }'
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-          threshold-data='[{"for":"y0","type":"max","value":15.4784},{"for":"y0","type":"min","value":9.6531}]'
-          display-threshold-title
-          threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}'
+          chart-extents='{"x":["dynamic","dynamic"],"y":[-1,18]}'
           x-axis-config='{"title":"Date"}'
-          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Temperature","titleTruncation":false,"unit":"C"}}'
+          y-axis-config='{"title":"Wind Speed","titleTruncation":false,"unit":"m/s","axis2":{"title":"Moving Average","titleTruncation":false,"unit":"m/s"}}'
           navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
       </div>
