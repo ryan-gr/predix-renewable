@@ -115,8 +115,8 @@ const modifyEpoch = (del) => {
   getDataWithRange(beforeEpoch(), nowEpoch());
 }
 const nowEpoch = () => _nowEpoch;
-const resetNowEpoch = () => 1534291200000;
-const beforeEpoch = () => _nowEpoch - 86400000;
+const resetNowEpoch = () => _nowEpoch = 1534291200000;
+const beforeEpoch = () => 1533081600000;//_nowEpoch - 86400000;
 
 const getDataWithRange = (epochStart, epochEnd) => {
   const myTimeSeriesBody = {
