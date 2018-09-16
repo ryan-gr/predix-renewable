@@ -1,5 +1,5 @@
-#this is the one with multi variable, test of rmse, r^2, and other stuff.
-#from here we deduce the coeff and intercept, our  model is built alr essentially
+#this is the one with multi variable, test of rmse, r^2, etc.
+#from here we deduce the coeff and intercept, our model is essentially built
 from sklearn import linear_model
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
@@ -8,8 +8,8 @@ import numpy as np
 import pickle
 
 
-df = pd.read_csv('C:/Users/hojin/OneDrive/Documents/DataPredix.csv',index_col=0)
-DataForAugust = pd.read_csv('C:/Users/hojin/OneDrive/Documents/DataPredixForAug18.csv',index_col=0)
+df = pd.read_csv('../raw_data/DataPredix.csv',index_col=0)
+DataForAugust = pd.read_csv('./DataPredixForAug18.csv',index_col=0)
 
 #process for train
 targV=df._getitem_column("targVar")
@@ -38,26 +38,3 @@ explainedVarianceScore=metrics.explained_variance_score(testTargVar, y_pred)
 
 filename = 'finalized_model.sav'
 pickle.dump(lm, open(filename, 'wb'),protocol=2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

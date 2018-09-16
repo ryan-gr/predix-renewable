@@ -1,5 +1,3 @@
-
-
 #alternate reg using RANSAC, doesnt work as well
 
 from sklearn import metrics
@@ -9,8 +7,8 @@ import pandas as pd
 import numpy as np
 import pickle
 
-df = pd.read_csv('C:/Users/hojin/OneDrive/Documents/DataPredix.csv',index_col=0)
-DataForAugust = pd.read_csv('C:/Users/hojin/OneDrive/Documents//DataPredixForAug18.csv',index_col=0)
+df = pd.read_csv('../raw_data/DataPredix.csv',index_col=0)
+DataForAugust = pd.read_csv('./DataPredixForAug18.csv',index_col=0)
 
 #process for train
 targV=df._getitem_column("targVar")
