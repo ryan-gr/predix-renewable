@@ -43,7 +43,7 @@ window.onload = () => {
 }
 
 window.onkeypress = (e) => {
-  //Leaving this here for testing the prediction / display of data.
+  //Leaving this here for testing the prediction / displa
   //console.log(e.keyCode);
   if (e.keyCode == 61) nextHour();
   if (e.keyCode == 45) previousHour();
