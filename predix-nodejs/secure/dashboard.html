@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Ventus Dashboard</title>
     <script src="/webcomponentsjs/webcomponents-lite.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.js"></script> -->
@@ -53,6 +54,7 @@
             size="delta">
           </px-key-value-pair>
           <px-key-value-pair
+            id='turbine-id-text'
             label="Turbine ID"
             value="W1324"
             uom=""
@@ -146,7 +148,7 @@
           height="0"
           chart-horizontal-alignment="center"
           chart-vertical-alignment="center"
-          margin='{"top":30,"bottom":70,"left":65,"right":65}'
+          margin='{"top":30,"bottom":40,"left":65,"right":65}'
           tooltip-config='{}'
           register-config='{"type":"horizontal"}'
           selection-type="xy"

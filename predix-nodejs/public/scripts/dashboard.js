@@ -2,7 +2,7 @@ const loadData = () => {
   console.log(nowEpoch());
   console.log(beforeEpoch());
   console.log('trying to get data with above range.');
-  getDataWithRange(beforeEpoch(), nowEpoch());
+  getDataWithRange(beforeEpoch(), nowEpoch(), true);
   console.log('END');
 }
 
@@ -13,7 +13,13 @@ window.onload = () => {
     const action = e.detail.action;
     const farmId = e.detail.item.farmId;
     const turbineId = e.detail.item.turbineId;
+    const status = e.detail.item.status;
     if (action == 'dashboard') {
+      if (turbineId == 'W1326' || status == 'Maintenance') {
+        alert('Analytics unavailable due to maintenance.');
+        return;
+      }
+      getDataWithRange(beforeEpoch(), nowEpoch(), (turbineId == 'W1325'));
       const nav = document.querySelector('px-app-nav');
       nav.selectedRoute = ['home'];
     }
@@ -37,6 +43,7 @@ window.onload = () => {
 }
 
 window.onkeypress = (e) => {
+  //Leaving this here for testing the prediction / display of data.
   //console.log(e.keyCode);
   if (e.keyCode == 61) nextHour();
   if (e.keyCode == 45) previousHour();
@@ -112,13 +119,16 @@ const previousHour = () => modifyEpoch(-3600000);
 const modifyEpoch = (del) => {
   _nowEpoch += del;
   console.log('new epoch', _nowEpoch, new Date(_nowEpoch));
-  getDataWithRange(beforeEpoch(), nowEpoch());
+  getDataWithRange(beforeEpoch(), nowEpoch(), latestAlt);
 }
 const nowEpoch = () => _nowEpoch;
 const resetNowEpoch = () => _nowEpoch = 1534291200000;
 const beforeEpoch = () => 1533081600000;//_nowEpoch - 86400000;
 
-const getDataWithRange = (epochStart, epochEnd) => {
+let latestAlt = false;
+const getDataWithRange = (epochStart, epochEnd, alt = false) => {
+  console.log('Getting data with range', epochStart, epochEnd, alt);
+  latestAlt = alt;
   const myTimeSeriesBody = {
 		tags: [],
     start: epochStart,
@@ -138,6 +148,12 @@ const getDataWithRange = (epochStart, epochEnd) => {
     'target_variable_a',
   ];
 
+  if (alt) {
+    for (const i in tags) {
+      tags[i] = 'madison_' + tags[i];
+    }
+  }
+
 	for (const tag of tags) {
 		myTimeSeriesBody.tags.push({
 			"name" : tag,
@@ -155,22 +171,22 @@ const getDataWithRange = (epochStart, epochEnd) => {
       for (const tag of data.tags) {
         const name = tag.name;
         const vals = tag.results[0].values;
-        analyticsData[name] = [];
+        analyticsData[name.replace('madison_', '')] = [];
         for (const i in vals) {
           const time = vals[i][0];
           const measurement = vals[i][1];
-          if (name == 'wind_speed_a') {
+          if (name == 'wind_speed_a' || name == 'madison_wind_speed_a') {
             graphData.push({
               'timeStamp': time,
               'y0': measurement/10,
             });
           }
-          if (name == 'moving_ave_a') {
+          if (name == 'moving_ave_a' || name == 'madison_moving_ave_a') {
             graphData[i]['y1'] = measurement/10;
           }
           if (i == vals.length - 1 || i == vals.length - 2) {
             if (recordTime) analyticsData.time.push(time);
-            analyticsData[name].push(measurement);
+            analyticsData[name.replace('madison_', '')].push(measurement);
           }
         }
         recordTime = false;
@@ -181,14 +197,17 @@ const getDataWithRange = (epochStart, epochEnd) => {
       const latestTime = analyticsData.time[analyticsData.time.length - 1];
       const latestWindSpeed = analyticsData.wind_speed_a[analyticsData.wind_speed_a.length - 1] / 10;
       const latestTemperature = analyticsData.temperature_a[analyticsData.temperature_a.length - 1] / 10;
+
       console.log('latestTime', latestTime);
       console.log('latestWindSpeed', latestWindSpeed);
       console.log('latestTemperature', latestTemperature);
       updateCurrentTimeStamp(latestTime);
       document.querySelector('#wind-speed-text').setAttribute('value', latestWindSpeed);
-      document.querySelector('#power-output-text').setAttribute('value', getPowerFromWindspeed(latestWindSpeed));
+      document.querySelector('#power-output-text').setAttribute('value', getPowerFromWindspeed(latestWindSpeed).toFixed(1));
       document.querySelector('#temperature-text').setAttribute('value', latestTemperature);
+      document.querySelector('#turbine-id-text').setAttribute('value', (alt) ? 'W1325' : 'W1324');
       document.querySelector('px-vis-timeseries').setAttribute('chart-data', JSON.stringify(graphData));
+      document.querySelector('px-vis-timeseries').setAttribute('event-data', JSON.stringify([{"id":"123","time":nowEpoch(),"label":"Now"}]));
       console.log('querying analytics');
       getPredictedValue(analyticsData, graphData);
 
@@ -219,7 +238,7 @@ const getPredictedValue = (data, graphData) => {
       const predictedValue = JSON.parse(data.result).Prediction;
       console.log('predicted value', predictedValue);
       document.querySelector('#predicted-wind-speed-text').setAttribute('value', parseInt(predictedValue)/10);
-      document.querySelector('#predicted-power-output-text').setAttribute('value', getPowerFromWindspeed(parseInt(predictedValue)/10));
+      document.querySelector('#predicted-power-output-text').setAttribute('value', getPowerFromWindspeed(parseInt(predictedValue)/10).toFixed(1));
       const latestTime = graphData[graphData.length - 1].timeStamp;
       graphData[graphData.length] = {timeStamp: latestTime + 3600000 * 2, y0:parseInt(predictedValue)/10};
       console.log(graphData);
